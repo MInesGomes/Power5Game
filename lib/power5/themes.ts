@@ -9,7 +9,7 @@ import { officeScenarios, homeScenarios } from "./scenarios"
 export const themes: ThemeDef[] = [
   {
     id: "office",
-    label: "Office",
+    label: "Work",
     icon: "Building2",
     gradient: "from-sky-400 via-cyan-400 to-blue-500",
     sceneGradient: "from-slate-200 via-sky-100 to-slate-300 dark:from-slate-800 dark:via-slate-900 dark:to-slate-950",
@@ -18,7 +18,7 @@ export const themes: ThemeDef[] = [
   },
   {
     id: "home",
-    label: "Home",
+    label: "Pride & Prejudice",
     icon: "Home",
     gradient: "from-amber-400 via-orange-400 to-rose-500",
     sceneGradient: "from-amber-100 via-orange-100 to-rose-200 dark:from-amber-950 dark:via-orange-950 dark:to-rose-950",
@@ -27,7 +27,7 @@ export const themes: ThemeDef[] = [
   },
   {
     id: "school",
-    label: "School",
+    label: "Dad & Mom",
     icon: "GraduationCap",
     gradient: "from-emerald-400 via-teal-400 to-cyan-500",
     sceneGradient: "from-emerald-100 via-teal-100 to-cyan-200 dark:from-emerald-950 dark:via-teal-950 dark:to-cyan-950",
@@ -36,7 +36,7 @@ export const themes: ThemeDef[] = [
   },
   {
     id: "antarctica",
-    label: "Antarctica",
+    label: "Atlantis",
     icon: "Snowflake",
     gradient: "from-cyan-300 via-sky-300 to-indigo-400",
     sceneGradient: "from-cyan-100 via-sky-100 to-indigo-200 dark:from-cyan-950 dark:via-sky-950 dark:to-indigo-950",
@@ -72,7 +72,7 @@ export const themes: ThemeDef[] = [
   },
   {
     id: "space-land",
-    label: "Space Land",
+    label: "Future Land",
     icon: "Rocket",
     gradient: "from-indigo-400 via-blue-500 to-cyan-500",
     sceneGradient: "from-indigo-200 via-blue-200 to-slate-300 dark:from-indigo-950 dark:via-blue-950 dark:to-slate-950",

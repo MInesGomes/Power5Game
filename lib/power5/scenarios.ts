@@ -315,7 +315,7 @@ export const officeScenarios: Scenario[] = [
   {
     id: "office-5",
     level: 5,
-    title: "Continuous Renewal",
+    title: "Recharge with purpose",
     principle: "5 — Recharge",
     description:
       "You have spent four consecutive weeks working overtime to prepare for an intense regulatory audit. You notice you are retaining less data, making simple errors, and experiencing physical exhaustion.",

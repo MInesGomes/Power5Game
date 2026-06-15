@@ -1,0 +1,443 @@
+Looking at this request, I'll create an immersive 3D office world with 5 distinct scenarios using Three.js.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office World - 5 Scenarios</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; background: #000; }
+  #canvas { display: block; }
+  #ui {
+    position: fixed; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 10;
+  }
+  #levelBar {
+    display: flex; justify-content: center; gap: 8px; padding: 15px;
+    pointer-events: auto;
+  }
+  .level-btn {
+    background: rgba(20,25,40,0.8); color: #aab; border: 1px solid rgba(120,160,255,0.3);
+    padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px;
+    backdrop-filter: blur(8px); transition: all 0.3s; white-space: nowrap;
+  }
+  .level-btn:hover { background: rgba(60,90,160,0.7); color: #fff; }
+  .level-btn.active { background: linear-gradient(135deg,#3a6cf4,#7b3df4); color:#fff; border-color: #6af; box-shadow: 0 0 18px rgba(80,130,255,0.6); }
+  #info {
+    position: fixed; bottom: 20px; left: 20px; color: #fff;
+    background: rgba(10,15,30,0.75); padding: 14px 18px; border-radius: 12px;
+    max-width: 340px; backdrop-filter: blur(10px); border: 1px solid rgba(120,160,255,0.25);
+    pointer-events: none;
+  }
+  #info h2 { font-size: 17px; margin-bottom: 6px; background: linear-gradient(90deg,#6af,#a7f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  #info p { font-size: 12px; color: #bcd; line-height: 1.5; }
+  #info .cam { font-size: 11px; color: #789; margin-top: 6px; font-style: italic; }
+  #hint { position: fixed; top: 70px; right: 20px; color: #678; font-size: 11px; pointer-events: none; text-align: right; }
+  #loader { position: fixed; inset: 0; background: #05080f; display: flex; align-items: center; justify-content: center; z-index: 100; color: #6af; font-size: 18px; }
+</style>
+</head>
+<body>
+<div id="loader">Loading Office World...</div>
+<div id="ui">
+  <div id="levelBar">
+    <button class="level-btn active" data-level="0">1 · Open Office</button>
+    <button class="level-btn" data-level="1">2 · Busy Desk</button>
+    <button class="level-btn" data-level="2">3 · Meeting Room</button>
+    <button class="level-btn" data-level="3">4 · Private Office</button>
+    <button class="level-btn" data-level="4">5 · Late Night</button>
+  </div>
+</div>
+<div id="info">
+  <h2 id="infoTitle"></h2>
+  <p id="infoDesc"></p>
+  <p class="cam" id="infoCam"></p>
+</div>
+<div id="hint">Drag to orbit · Scroll to zoom</div>
+<canvas id="canvas"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 200);
+
+// ---------- Simple Orbit Controls ----------
+const ctrl = { theta: 0, phi: Math.PI/3, radius: 14, target: new THREE.Vector3(0,1.5,0), dragging:false, px:0, py:0 };
+function applyCam(){
+  const x = ctrl.target.x + ctrl.radius * Math.sin(ctrl.phi)*Math.sin(ctrl.theta);
+  const y = ctrl.target.y + ctrl.radius * Math.cos(ctrl.phi);
+  const z = ctrl.target.z + ctrl.radius * Math.sin(ctrl.phi)*Math.cos(ctrl.theta);
+  camera.position.set(x,y,z);
+  camera.lookAt(ctrl.target);
+}
+canvas.addEventListener('pointerdown', e=>{ ctrl.dragging=true; ctrl.px=e.clientX; ctrl.py=e.clientY; });
+window.addEventListener('pointerup', ()=> ctrl.dragging=false);
+window.addEventListener('pointermove', e=>{
+  if(!ctrl.dragging) return;
+  ctrl.theta -= (e.clientX-ctrl.px)*0.005;
+  ctrl.phi = Math.max(0.2, Math.min(Math.PI-0.2, ctrl.phi - (e.clientY-ctrl.py)*0.005));
+  ctrl.px=e.clientX; ctrl.py=e.clientY;
+});
+canvas.addEventListener('wheel', e=>{ ctrl.radius = Math.max(4, Math.min(30, ctrl.radius + e.deltaY*0.01)); e.preventDefault(); }, {passive:false});
+
+// ---------- Helpers ----------
+function makeTextTexture(lines, opts={}){
+  const c = document.createElement('canvas'); c.width=512; c.height=256;
+  const x = c.getContext('2d');
+  x.fillStyle = opts.bg || '#0a1428'; x.fillRect(0,0,512,256);
+  if(opts.grad){ const g=x.createLinearGradient(0,0,512,256); g.addColorStop(0,'#102040'); g.addColorStop(1,'#1a3060'); x.fillStyle=g; x.fillRect(0,0,512,256);}
+  x.textAlign='left';
+  lines.forEach((l,i)=>{
+    x.fillStyle = l.color || '#7af';
+    x.font = (l.size||24)+'px Segoe UI, Arial';
+    x.fillText(l.t, l.x!=null?l.x:30, l.y!=null?l.y:50+i*44);
+  });
+  const tex = new THREE.CanvasTexture(c); tex.needsUpdate=true; return tex;
+}
+
+const groups = []; // one group per level
+function newGroup(){ const g=new THREE.Group(); g.visible=false; scene.add(g); groups.push(g); return g; }
+
+// floor + walls factory
+function room(g, color, floorColor){
+  const fmat = new THREE.MeshStandardMaterial({color:floorColor||0x2a2f3a, roughness:0.8});
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(40,40), fmat);
+  floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; g.add(floor);
+  const wmat = new THREE.MeshStandardMaterial({color:color||0x3a4050, roughness:0.9, side:THREE.DoubleSide});
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(40,16), wmat);
+  back.position.set(0,8,-12); back.receiveShadow=true; g.add(back);
+  const left = new THREE.Mesh(new THREE.PlaneGeometry(40,16), wmat);
+  left.position.set(-12,8,0); left.rotation.y=Math.PI/2; g.add(left);
+  return {floor,back,left};
+}
+
+function desk(x,z, w=4, d=2){
+  const grp = new THREE.Group();
+  const top = new THREE.Mesh(new THREE.BoxGeometry(w,0.15,d), new THREE.MeshStandardMaterial({color:0x6b4a2f, roughness:0.6}));
+  top.position.y=1.4; top.castShadow=true; top.receiveShadow=true; grp.add(top);
+  const legGeo = new THREE.BoxGeometry(0.15,1.4,0.15);
+  const legMat = new THREE.MeshStandardMaterial({color:0x333});
+  [[-w/2+0.2,-d/2+0.2],[w/2-0.2,-d/2+0.2],[-w/2+0.2,d/2-0.2],[w/2-0.2,d/2-0.2]].forEach(p=>{
+    const l=new THREE.Mesh(legGeo,legMat); l.position.set(p[0],0.7,p[1]); l.castShadow=true; grp.add(l);
+  });
+  grp.position.set(x,0,z); return grp;
+}
+
+function monitor(x,y,z, tex, w=2, h=1.2){
+  const grp=new THREE.Group();
+  const frame=new THREE.Mesh(new THREE.BoxGeometry(w+0.1,h+0.1,0.06), new THREE.MeshStandardMaterial({color:0x111}));
+  grp.add(frame);
+  const screen=new THREE.Mesh(new THREE.PlaneGeometry(w,h), new THREE.MeshBasicMaterial({map:tex}));
+  screen.position.z=0.04; grp.add(screen);
+  const stand=new THREE.Mesh(new THREE.BoxGeometry(0.1,0.4,0.1), new THREE.MeshStandardMaterial({color:0x222}));
+  stand.position.y=-h/2-0.2; grp.add(stand);
+  grp.position.set(x,y,z); return grp;
+}
+
+function chair(x,z){
+  const g=new THREE.Group();
+  const m=new THREE.MeshStandardMaterial({color:0x222831, roughness:0.7});
+  const seat=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.12,0.9),m); seat.position.y=0.85; seat.castShadow=true; g.add(seat);
+  const back=new THREE.Mesh(new THREE.BoxGeometry(0.9,1,0.12),m); back.position.set(0,1.4,-0.4); back.castShadow=true; g.add(back);
+  const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,0.85),m); pole.position.y=0.42; g.add(pole);
+  g.position.set(x,0,z); return g;
+}
+
+// ============ LEVEL 1: Open Plan Office ============
+const animated = []; // {fn}
+function buildL1(){
+  const g=newGroup();
+  room(g,0x40485a,0x353a45);
+  for(let i=-1;i<=1;i++) for(let j=0;j<2;j++){
+    g.add(desk(i*5, j*4-2));
+    g.add(chair(i*5, j*4));
+    const m=monitor(i*5,1.95,j*4-2.6, makeTextTexture([{t:'Project',size:26},{t:'On Track',color:'#4f8',size:20}],{grad:true}),1.4,0.8);
+    g.add(m);
+  }
+  // dashboard
+  const dashTex = makeTextTexture([
+    {t:'PROJECT DASHBOARD', color:'#9cf', size:30, y:50},
+    {t:'Tasks  ██████░░  78%', color:'#5e9', size:24, y:110},
+    {t:'Budget ████████  92%', color:'#5e9', size:24, y:150},
+    {t:'Shipments  ⚠ WARNING', color:'#f55', size:26, y:210}
+  ],{bg:'#08101f'});
+  const dash = monitor(0,9,-11.7, dashTex, 12, 6);
+  g.add(dash);
+  // flashing red warning panel
+  const warnTex = makeTextTexture([{t:'⚠ SHIPMENT', color:'#fff', size:34, y:90},{t:'DELAYED', color:'#fff', size:40, y:150}],{bg:'#aa0000'});
+  const warn = new THREE.Mesh(new THREE.PlaneGeometry(3,1.6), new THREE.MeshBasicMaterial({map:warnTex, transparent:true}));
+  warn.position.set(6.5,9,-11.6); g.add(warn);
+  const warnGlow = new THREE.PointLight(0xff2200, 0, 8);
+  warnGlow.position.set(6.5,9,-10); g.add(warnGlow);
+  animated.push({lvl:0, fn:(t)=>{ const p=(Math.sin(t*5)+1)/2; warn.material.opacity=0.4+p*0.6; warnGlow.intensity=p*3; }});
+  // lights
+  const amb=new THREE.AmbientLight(0x8090b0,0.6); g.add(amb);
+  const dir=new THREE.DirectionalLight(0xffffff,0.8); dir.position.set(6,15,8); dir.castShadow=true;
+  dir.shadow.camera.left=-20; dir.shadow.camera.right=20; dir.shadow.camera.top=20; dir.shadow.camera.bottom=-20;
+  g.add(dir);
+}
+
+// ============ LEVEL 2: Busy Desk ============
+function buildL2(){
+  const g=newGroup();
+  room(g,0x4a5266,0x3a3f4a);
+  g.add(desk(0,0,5,2.5));
+  // laptop
+  const lap=new THREE.Group();
+  const base=new THREE.Mesh(new THREE.BoxGeometry(1.6,0.06,1), new THREE.MeshStandardMaterial({color:0x999, metalness:0.6}));
+  base.position.y=1.48; lap.add(base);
+  const scr=new THREE.Mesh(new THREE.BoxGeometry(1.6,1,0.05), new THREE.MeshStandardMaterial({color:0x111}));
+  scr.position.set(0,1.95,-0.48); scr.rotation.x=-0.35; lap.add(scr);
+  const scrTex=makeTextTexture([{t:'Inbox (47)',color:'#9cf',size:28},{t:'Meeting in 5m',color:'#fa5',size:22},{t:'Review docs',color:'#bcd',size:22}],{grad:true});
+  const sf=new THREE.Mesh(new THREE.PlaneGeometry(1.5,0.9), new THREE.MeshBasicMaterial({map:scrTex}));
+  sf.position.set(0,1.95,-0.45); sf.rotation.x=-0.35; lap.add(sf);
+  g.add(lap);
+  // calendar with countdown
+  const calMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.2), new THREE.MeshBasicMaterial({transparent:true}));
+  calMesh.position.set(2.2,2.2,-0.3); g.add(calMesh);
+  // floating notifications
+  const notifs=[];
+  const notifData=[['📧 New Email','#5cf'],['⏰ Deadline!','#f66'],['💬 3 Messages','#5fa'],['📅 Reminder','#fc6'],['⚠ Update','#f9a']];
+  notifData.forEach((n,i)=>{
+    const tex=makeTextTexture([{t:n[0],color:n[1],size:30,y:60}],{bg:'#10182e'});
+    const mat=new THREE.MeshBasicMaterial({map:tex, transparent:true});
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(1.5,0.6),mat);
+    const ang=i/notifData.length*Math.PI*2;
+    m.userData={ang, r:2.5+Math.random(), h:2.5+Math.random()*1.5, sp:0.5+Math.random()*0.5};
+    g.add(m); notifs.push(m);
+  });
+  let cd=0;
+  animated.push({lvl:1, fn:(t)=>{
+    notifs.forEach(m=>{
+      const d=m.userData; const a=d.ang+t*d.sp*0.3;
+      m.position.set(Math.cos(a)*d.r, d.h+Math.sin(t*2+d.ang)*0.2, Math.sin(a)*d.r*0.5+0.5);
+      m.lookAt(camera.position);
+    });
+    cd-=0.016; if(cd<0) cd=86400;
+    const hh=Math.floor(cd/3600), mm=Math.floor(cd%3600/60), ss=Math.floor(cd%60);
+    calMesh.material.map=makeTextTexture([
+      {t:'DEADLINE',color:'#f66',size:30,y:50},
+      {t:hh+'h '+mm+'m '+ss+'s',color:'#fff',size:38,y:120},
+      {t:'remaining',color:'#9ab',size:22,y:175}
+    ],{bg:'#1a0a0a'});
+    calMesh.material.needsUpdate=true;
+  }});
+  g.add(new THREE.AmbientLight(0x90a0c0,0.7));
+  const dir=new THREE.DirectionalLight(0xffffff,0.7); dir.position.set(3,8,5); dir.castShadow=true; g.add(dir);
+  const pt=new THREE.PointLight(0x66aaff,1.5,10); pt.position.set(0,3,2); g.add(pt);
+}
+
+// ============ LEVEL 3: Meeting Room ============
+function buildL3(){
+  const g=newGroup();
+  room(g,0x3a4452,0x2f3540);
+  // negotiation table
+  const tableTop=new THREE.Mesh(new THREE.CylinderGeometry(3,3,0.2,48), new THREE.MeshStandardMaterial({color:0x4a3520, roughness:0.4, metalness:0.2}));
+  tableTop.position.y=1.4; tableTop.castShadow=true; tableTop.receiveShadow=true; g.add(tableTop);
+  const tleg=new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.7,1.3,16), new THREE.MeshStandardMaterial({color:0x222}));
+  tleg.position.y=0.65; g.add(tleg);
+  g.add(chair(-3.5,0)); g.add(chair(3.5,0)).rotation.y=Math.PI;
+  // holographic contracts
+  const docs=[];
+  for(let s=-1;s<=1;s+=2){
+    const tex=makeTextTexture([
+      {t:'CONTRACT',color:'#6cf',size:30,y:50},
+      {t:'Terms & Clauses',color:'#9df',size:20,y:95},
+      {t:'§ Section 4.2 ...',color:'#7be',size:16,y:130},
+      {t:'Signature: ____',color:'#aef',size:18,y:200}
+    ],{bg:'#031020'});
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.2), new THREE.MeshBasicMaterial({map:tex, transparent:true, opacity:0.85}));
+    m.position.set(s*2.2,2.6,0); m.rotation.y=-s*0.4; g.add(m); docs.push(m);
+    // hologram base glow
+    const ring=new THREE.Mesh(new THREE.RingGeometry(0.5,0.7,32), new THREE.MeshBasicMaterial({color:0x33aaff, transparent:true, opacity:0.4, side:THREE.DoubleSide}));
+    ring.rotation.x=-Math.PI/2; ring.position.set(s*2.2,1.52,0); g.add(ring);
+  }
+  // floating scales icon between
+  const scales=new THREE.Group();
+  const beam=new THREE.Mesh(new THREE.BoxGeometry(1.6,0.06,0.06), new THREE.MeshStandardMaterial({color:0xffd700, metalness:0.8, roughness:0.2, emissive:0x886600}));
+  scales.add(beam);
+  const post=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,1), new THREE.MeshStandardMaterial({color:0xffd700, metalness:0.8, emissive:0x664400}));
+  post.position.y=-0.5; scales.add(post);
+  [-0.7,0.7].forEach(s=>{
+    const pan=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.25,0.1,16,1,true), new THREE.MeshStandardMaterial({color:0xffd700, metalness:0.9, side:THREE.DoubleSide, emissive:0x553300}));
+    pan.position.set(s,-0.4,0); scales.add(pan);
+    const str=new THREE.Mesh(new THREE.CylinderGeometry(0.01,0.01,0.4),new THREE.MeshBasicMaterial({color:0xffe680}));
+    str.position.set(s,-0.2,0); scales.add(str);
+  });
+  scales.position.set(0,3.4,0); scales.scale.set(0.9,0.9,0.9); g.add(scales);
+  const scLight=new THREE.PointLight(0xffcc44,1.2,6); scLight.position.set(0,3.4,0); g.add(scLight);
+  animated.push({lvl:2, fn:(t)=>{
+    scales.position.y=3.4+Math.sin(t*1.5)*0.15;
+    scales.rotation.y=t*0.4;
+    beam.rotation.z=Math.sin(t*2)*0.1;
+    docs.forEach((d,i)=>{ d.position.y=2.6+Math.sin(t*1.2+i)*0.1; d.material.opacity=0.7+Math.sin(t*3+i)*0.15; });
+  }});
+  g.add(new THREE.AmbientLight(0x7080a0,0.6));
+  const dir=new THREE.DirectionalLight(0xffffff,0.6); dir.position.set(4,10,6); dir.castShadow=true; g.add(dir);
+}
+
+// ============ LEVEL 4: Private Office ============
+function buildL4(){
+  const g=newGroup();
+  room(g,0x3a3530,0x2a2520);
+  g.add(desk(0,-1,4.5,2.2));
+  // laptop
+  const lap=new THREE.Group();
+  const base=new THREE.Mesh(new THREE.BoxGeometry(1.5,0.06,1), new THREE.MeshStandardMaterial({color:0x888, metalness:0.5}));
+  base.position.y=1.48; lap.add(base);
+  const scr=new THREE.Mesh(new THREE.BoxGeometry(1.5,0.95,0.05), new THREE.MeshStandardMaterial({color:0x111}));
+  scr.position.set(0,1.93,-0.46); scr.rotation.x=-0.4; lap.add(scr);
+  const stex=makeTextTexture([{t:'Document.docx',color:'#cde',size:26},{t:'...working late',color:'#9ab',size:20}],{bg:'#0c0c10'});
+  const sf=new THREE.Mesh(new THREE.PlaneGeometry(1.4,0.85), new THREE.MeshBasicMaterial({map:stex}));
+  sf.position.set(0,1.93,-0.43); sf.rotation.x=-0.4; lap.add(sf);
+  lap.position.z=-1; g.add(lap);
+  // scattered papers
+  const pmat=new THREE.MeshStandardMaterial({color:0xeeeee0, roughness:0.9});
+  for(let i=0;i<7;i++){
+    const p=new THREE.Mesh(new THREE.PlaneGeometry(0.7,0.95), pmat);
+    p.rotation.x=-Math.PI/2; p.rotation.z=Math.random()*Math.PI;
+    p.position.set(0.8+ (Math.random()-0.5)*2.5, 1.49+i*0.005, -0.5+(Math.random()-0.5)*1.5);
+    p.castShadow=true; g.add(p);
+  }
+  // coffee mug
+  const mug=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.15,0.32,16), new THREE.MeshStandardMaterial({color:0x884422}));
+  mug.position.set(-1.5,1.64,-0.6); mug.castShadow=true; g.add(mug);
+  // desk lamp
+  const lampLight=new THREE.SpotLight(0xffd9a0,3,9,0.6,0.5);
+  lampLight.position.set(1.5,3.5,-0.5); lampLight.target.position.set(0.3,1.4,-0.8); lampLight.castShadow=true;
+  g.add(lampLight); g.add(lampLight.target);
+  const bulb=new THREE.Mesh(new THREE.SphereGeometry(0.12), new THREE.MeshBasicMaterial({color:0xffdda0}));
+  bulb.position.copy(lampLight.position); g.add(bulb);
+  g.add(new THREE.AmbientLight(0x40383a,0.35));
+  const screenGlow=new THREE.PointLight(0x88aaff,0.8,4); screenGlow.position.set(0,2,-0.5); g.add(screenGlow);
+  animated.push({lvl:3, fn:(t)=>{ lampLight.intensity=2.8+Math.sin(t*7)*0.15; }});
+}
+
+// ============ LEVEL 5: Late Night ============
+function buildL5(){
+  const g=newGroup();
+  room(g,0x15181f,0x101218);
+  for(let i=-1;i<=1;i++) for(let j=0;j<2;j++){
+    g.add(desk(i*5, j*4-2));
+    g.add(chair(i*5, j*4-0.5));
+  }
+  // clock 11:47 PM
+  const clockTex=makeTextTexture([{t:'11:47',color:'#5af',size:60,y:90},{t:'PM',color:'#39c',size:30,y:140}],{bg:'#04060c'});
+  const clock=new THREE.Mesh(new THREE.PlaneGeometry(2.5,2.5), new THREE.MeshBasicMaterial({map:clockTex}));
+  clock.position.set(0,8,-11.7); g.add(clock);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(1.5,0.08,12,48), new THREE.MeshBasicMaterial({color:0x2266aa}));
+  ring.position.set(0,8,-11.6); g.add(ring);
+  // floating coffee cups
+  const cups=[];
+  for(let i=0;i<6;i++){
+    const cup=new THREE.Group();
+    const body=new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.16,0.4,12), new THREE.MeshStandardMaterial({color:0xddccbb}));
+    cup.add(body);
+    const handle=new THREE.Mesh(new THREE.TorusGeometry(0.12,0.03,8,16), new THREE.MeshStandardMaterial({color:0xddccbb}));
+    handle.position.set(0.22,0,0); cup.add(handle);
+    cup.userData={ang:i/6*Math.PI*2, r:4+Math.random()*2, h:2+Math.random()*2, sp:0.3+Math.random()*0.4};
+    g.add(cup); cups.push(cup);
+  }
+  // draining energy bar
+  const barBg=new THREE.Mesh(new THREE.PlaneGeometry(4,0.5), new THREE.MeshBasicMaterial({color:0x222}));
+  barBg.position.set(0,3.5,-2); g.add(barBg);
+  const barFill=new THREE.Mesh(new THREE.PlaneGeometry(1,0.4), new THREE.MeshBasicMaterial({color:0x33cc55}));
+  barFill.position.set(0,3.5,-1.99); g.add(barFill);
+  const barTex=makeTextTexture([{t:'⚡ ENERGY',color:'#9f9',size:30,y:60}],{bg:'#0a1a0a'});
+  const barLabel=new THREE.Mesh(new THREE.PlaneGeometry(1.8,0.5), new THREE.MeshBasicMaterial({map:barTex,transparent:true}));
+  barLabel.position.set(0,4.2,-2); g.add(barLabel);
+  g.add(new THREE.AmbientLight(0x1a2030,0.4));
+  const moon=new THREE.DirectionalLight(0x4060aa,0.4); moon.position.set(-8,12,6); g.add(moon);
+  const deskGlow=new THREE.PointLight(0x3366cc,1,12); deskGlow.position.set(0,4,0); g.add(deskGlow);
+  animated.push({lvl:4, fn:(t)=>{
+    cups.forEach(c=>{ const d=c.userData; const a=d.ang+t*d.sp*0.2;
+      c.position.set(Math.cos(a)*d.r, d.h+Math.sin(t*1.5+d.ang)*0.3, Math.sin(a)*d.r*0.4-2);
+      c.rotation.y=t*0.5; c.rotation.z=Math.sin(t+d.ang)*0.2;
+    });
+    const e=0.15+(Math.sin(t*0.3)*0.5+0.5)*0.5; // drain pulse
+    barFill.scale.x=e*4; barFill.position.x=-(4*(1-e*1))/2 + (4*e)/2 -2 +2;
+    barFill.position.x = -2 + (e*4)/2;
+    barFill.material.color.setHSL(e*0.33,0.8,0.5);
+    ring.rotation.z=t*0.2;
+  }});
+}
+
+buildL1(); buildL2(); buildL3(); buildL4(); buildL5();
+
+// ---------- Level config (camera + info) ----------
+const levels=[
+  {title:'Level 1 · Modern Open-Plan Office', desc:'Large project dashboard on a wall screen. A shipment warning notification flashes red.', cam:'Slight isometric perspective from above with slow floating movement.',
+   theta:0.6, phi:0.7, radius:18, target:[0,3,-2], float:true},
+  {title:'Level 2 · Busy Office Desk', desc:'Multiple pop-up notifications float in 3D space. A calendar shows a deadline countdown.', cam:'Medium desk-level perspective.',
+   theta:0.2, phi:1.15, radius:7, target:[0,2,0], float:false},
+  {title:'Level 3 · Meeting Room', desc:'Contract documents displayed holographically. A floating scales icon hovers between the two parties.', cam:'Face-to-face conversational perspective.',
+   theta:0, phi:1.35, radius:8, target:[0,2.5,0], float:false},
+  {title:'Level 4 · Private Office', desc:'Laptop open on the desk, papers scattered, soft warm lighting.', cam:'Intimate over-the-desk perspective.',
+   theta:0.1, phi:1.05, radius:5, target:[0,1.8,-1], float:false},
+  {title:'Level 5 · Office Late at Night', desc:'Empty desks, dim lighting. The clock shows 11:47 PM. Floating coffee cups and a draining energy bar.', cam:'Static, slightly low and heavy perspective to communicate fatigue.',
+   theta:0.1, phi:1.45, radius:12, target:[0,3,-3], float:false},
+];
+
+let current=0;
+function setLevel(n){
+  current=n;
+  groups.forEach((g,i)=> g.visible = i===n);
+  const L=levels[n];
+  ctrl.theta=L.theta; ctrl.phi=L.phi; ctrl.radius=L.radius;
+  ctrl.target.set(L.target[0],L.target[1],L.target[2]);
+  if(n===4) scene.fog=new THREE.FogExp2(0x05080f,0.025);
+  else if(n===3) scene.fog=new THREE.FogExp2(0x100c08,0.02);
+  else scene.fog=null;
+  document.getElementById('infoTitle').textContent=L.title;
+  document.getElementById('infoDesc').textContent=L.desc;
+  document.getElementById('infoCam').textContent='📷 '+L.cam;
+  document.querySelectorAll('.level-btn').forEach((b,i)=> b.classList.toggle('active', i===n));
+}
+document.querySelectorAll('.level-btn').forEach(b=> b.addEventListener('click',()=> setLevel(+b.dataset.level)));
+
+setLevel(0);
+document.getElementById('loader').style.display='none';
+
+// ---------- Animate ----------
+const clock3=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const t=clock3.getElapsedTime();
+  animated.forEach(a=>{ if(a.lvl===current) a.fn(t); });
+  if(levels[current].float){
+    ctrl.theta = levels[current].theta + Math.sin(t*0.15)*0.25;
+    ctrl.phi = levels[current].phi + Math.sin(t*0.2)*0.05;
+  }
+  applyCam();
+  renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
+
+I've created an interactive 3D office world with all 5 scenarios. Key features:
+
+**Level 1** — Open-plan office with desks, a wall dashboard showing project stats, and a **flashing red shipment warning** (pulsing light + opacity). Camera does a slow isometric float.
+
+**Level 2** — Busy desk with a laptop, orbiting 3D **pop-up notifications**, and a live **deadline countdown calendar**. Medium desk-level view.
+
+**Level 3** — Meeting room with a circular negotiation table, two **holographic contract documents** (with glow rings), and a rotating golden **scales icon** floating between. Face-to-face angle.
+
+**Level 4** — Private office with warm spot-lamp lighting, open laptop, **scattered papers**, and a coffee mug. Intimate over-desk view with fog.
+
+**Level 5** — Late-night office, dim blue lighting, **clock showing 11:47 PM**, floating **coffee cups**, and a **draining energy bar** that shifts color. Low, heavy static angle with fog.
+
+Controls: drag to orbit, scroll to zoom, and switch levels via the top buttons.
