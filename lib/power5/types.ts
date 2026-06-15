@@ -61,6 +61,8 @@ export interface ThemeDef {
   label: string
   /** lucide-react icon name */
   icon: string
+  /** background image name */
+  bgImage: string
   /** gradient for the selector button border */
   gradient: string
   /** gradient classes used for the 3D viewport backdrop */

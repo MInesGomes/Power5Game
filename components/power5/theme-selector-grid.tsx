@@ -3,7 +3,6 @@
 import { motion } from "motion/react"
 import { useGame } from "@/lib/power5/game-context"
 import { themes } from "@/lib/power5/themes"
-import { ThemeIcon } from "./theme-icon"
 import { cn } from "@/lib/utils"
 
 export function ThemeSelectorGrid() {
@@ -38,23 +37,17 @@ export function ThemeSelectorGrid() {
               theme.gradient,
             )}
           >
-            <span className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[14px] bg-card/95 p-3 sm:p-4">
-              <span
-                className={cn(
-                  "flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow",
-                  theme.gradient,
-                )}
-              >
-                <ThemeIcon name={theme.icon} className="h-5 w-5" />
-              </span>
-              <span className="font-heading text-sm font-bold sm:text-base">{theme.label}</span>
-              <span
-                className={cn(
-                  "pointer-events-none absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-15",
-                  theme.gradient,
-                )}
-              />
-            </span>
+            <span
+              className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[14px] p-3 sm:p-4 "
+              style={{
+                backgroundImage: `url(${theme.bgImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <span className="font-heading text-white self-center font-bold sm:text-base mt-auto" >{theme.label}</span>
+            </span> 
           </motion.button>
         ))}
       </div>
