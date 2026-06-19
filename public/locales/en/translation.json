@@ -1,0 +1,7 @@
+{
+  "theme_light": "Light",
+  "theme_dark": "Dark",
+  "language": "Language",
+  "messages": "{{count}} message",
+  "messages_plural": "{{count}} messages"
+}

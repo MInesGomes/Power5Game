@@ -1,0 +1,7 @@
+{
+  "theme_light": "Claro",
+  "theme_dark": "Escuro",
+  "language": "Idioma",
+  "messages": "{{count}} mensagem",
+  "messages_plural": "{{count}} mensagens"
+}
