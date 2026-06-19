@@ -15,11 +15,6 @@ export function ThemeSelectorGrid() {
 
   return (
     <section aria-label="Choose a theme" className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
-        <h2 className="font-heading text-lg font-bold">Choose your world</h2>
-        <p className="text-sm text-muted-foreground">5 scenarios. 5 power skills.</p>
-      </div>
-
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {themes.map((theme, i) => (
           <motion.button

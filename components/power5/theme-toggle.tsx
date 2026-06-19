@@ -18,6 +18,7 @@ export function ThemeToggle({ className }: { className?: string }) {
   const dark = state.dark
   const currentLang = state.language ?? 'en'
   const [open, setOpen] = useState(false)
+  const [selectedLang, setSelectedLang] = useState(currentLang)
   const menuRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   const setLang = (code: string) => {
     dispatch({ type: 'SET_LANGUAGE', lang: code })
+    setSelectedLang(code)
     try {
       i18n.changeLanguage(code)
     } catch {
@@ -72,8 +74,8 @@ export function ThemeToggle({ className }: { className?: string }) {
           aria-haspopup="menu"
           aria-expanded={open}
         >
-          <img src={LANGS.find((l) => l.code === currentLang)?.src} alt={currentLang} className="h-4 w-4" />
-          <span className="font-medium">{currentLang.toUpperCase()}</span>
+          <img src={LANGS.find((l) => l.code === selectedLang)?.src} alt={selectedLang} className="h-4 w-4" />
+          <span className="font-medium">{selectedLang.toUpperCase()}</span>
         </button>
 
         {open && (
