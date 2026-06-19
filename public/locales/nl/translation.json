@@ -4,4 +4,23 @@
   "language": "Taal",
   "messages": "{{count}} bericht",
   "messages_plural": "{{count}} berichten"
+  ,
+  "leaderboard_title": "Scorebord",
+  "pts": "pt",
+  "you": "Jij",
+  "what_do_you_do": "Wat doe je?"
+  ,
+  "excellent_msg": "Uitstekend. Dat is de krachtige zet.",
+  "review_continue": "Bekijk de feedback en ga verder.",
+  "see_results": "Bekijk Resultaten",
+  "next_level": "Volgende Niveau",
+  "run_complete": "Run Voltooid!",
+  "badges_earned": "Bekers behaald",
+  "restart": "Opnieuw starten",
+  "choose_theme": "Thema Kiezen"
+  ,
+  "run_message_default": "Blijf oefenen — elke keuze bouwt de gewoonte op.",
+  "run_message_high": "Power Master! Je leidt met eigenaarschap, focus en empathie.",
+  "run_message_mid": "Sterk werk. Je instincten worden snel beter.",
+  "run_message_low": "Stevige inspanning. Bekijk de feedback en probeer het opnieuw."
 }

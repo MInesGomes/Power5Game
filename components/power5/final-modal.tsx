@@ -3,19 +3,21 @@
 import { AnimatePresence, motion } from "motion/react"
 import { RotateCcw, LayoutGrid, Award, Zap } from "lucide-react"
 import { useGame } from "@/lib/power5/game-context"
+import { useTranslation } from 'react-i18next'
 import { getTheme } from "@/lib/power5/themes"
 import { cn } from "@/lib/utils"
 
 export function FinalModal() {
   const { state, dispatch } = useGame()
+  const { t } = useTranslation()
   const theme = getTheme(state.themeId)
   const max = (theme?.scenarios.length ?? 5) * 10
   const pct = Math.max(0, Math.round((state.score / max) * 100))
 
-  let message = "Keep practicing — every choice builds the habit."
-  if (pct >= 90) message = "Power Master! You lead with ownership, focus, and empathy."
-  else if (pct >= 60) message = "Strong work. Your instincts are sharpening fast."
-  else if (pct >= 30) message = "Solid effort. Review the feedback and run it back."
+  let message = t('run_message_default')
+  if (pct >= 90) message = t('run_message_high')
+  else if (pct >= 60) message = t('run_message_mid')
+  else if (pct >= 30) message = t('run_message_low')
 
   return (
     <AnimatePresence>
@@ -39,7 +41,7 @@ export function FinalModal() {
               <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
                 <Zap className="h-7 w-7" fill="currentColor" />
               </div>
-              <h2 className="font-heading text-2xl font-extrabold">Run Complete!</h2>
+              <h2 className="font-heading text-2xl font-extrabold">{t('run_complete')}</h2>
               <p className="mt-1 text-sm text-muted-foreground">{theme?.label} world</p>
             </div>
 
@@ -48,14 +50,14 @@ export function FinalModal() {
                 <span className="font-heading text-5xl font-black text-primary tabular-nums">
                   {state.score}
                 </span>
-                <span className="pb-1.5 text-lg text-muted-foreground">/ {max} pts</span>
+                <span className="pb-1.5 text-lg text-muted-foreground">/ {max} {t('pts')}</span>
               </div>
               <p className="mt-3 text-pretty text-center text-sm leading-relaxed">{message}</p>
 
               {state.badges.length > 0 && (
                 <div className="mt-5">
                   <p className="mb-2 flex items-center justify-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    <Award className="h-4 w-4" /> Badges earned
+                    <Award className="h-4 w-4" /> {t('badges_earned')}
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {state.badges.map((b) => (
@@ -85,14 +87,14 @@ export function FinalModal() {
                     "font-heading text-sm font-bold text-primary-foreground shadow-lg",
                   )}
                 >
-                  <RotateCcw className="h-4 w-4" /> Restart
+                  <RotateCcw className="h-4 w-4" /> {t('restart')}
                 </button>
                 <button
                   type="button"
                   onClick={() => dispatch({ type: "GO_HOME" })}
                   className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-secondary px-4 py-2.5 font-heading text-sm font-bold text-secondary-foreground"
                 >
-                  <LayoutGrid className="h-4 w-4" /> Choose Theme
+                  <LayoutGrid className="h-4 w-4" /> {t('choose_theme')}
                 </button>
               </div>
             </div>

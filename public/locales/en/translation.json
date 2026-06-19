@@ -4,4 +4,23 @@
   "language": "Language",
   "messages": "{{count}} message",
   "messages_plural": "{{count}} messages"
+  ,
+  "leaderboard_title": "Leaderboard",
+  "pts": "pts",
+  "you": "You",
+  "what_do_you_do": "What do you do?"
+  ,
+  "excellent_msg": "Excellent. That's the power move.",
+  "review_continue": "Review the feedback above, then continue.",
+  "see_results": "See Results",
+  "next_level": "Next Level",
+  "run_complete": "Run Complete!",
+  "badges_earned": "Badges earned",
+  "restart": "Restart",
+  "choose_theme": "Choose Theme"
+  ,
+  "run_message_default": "Keep practicing — every choice builds the habit.",
+  "run_message_high": "Power Master! You lead with ownership, focus, and empathy.",
+  "run_message_mid": "Strong work. Your instincts are sharpening fast.",
+  "run_message_low": "Solid effort. Review the feedback and run it back."
 }

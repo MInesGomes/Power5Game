@@ -9,12 +9,15 @@ import {
 } from "react"
 import type { ChoiceKey } from "./types"
 import { getTheme } from "./themes"
+import i18n from 'i18next'
 
 export interface GameState {
   /** 1 = dashboard, 2-6 = gameplay stages */
   screen: number
   themeId: string | null
   dark: boolean
+  /** selected language code */
+  language: string
   score: number
   /** 0-based index into the current theme's scenarios */
   stageIndex: number
@@ -26,6 +29,7 @@ export interface GameState {
 
 type Action =
   | { type: "SET_THEME"; themeId: string }
+  | { type: "SET_LANGUAGE"; lang: string }
   | { type: "START_GAME" }
   | { type: "MAKE_CHOICE"; scenarioId: string; choiceKey: ChoiceKey; points: number }
   | { type: "NEXT_STAGE" }
@@ -42,6 +46,7 @@ const initialState: GameState = {
   screen: 1,
   themeId: null,
   dark: false,
+  language: 'en',
   score: 0,
   stageIndex: 0,
   choices: {},
@@ -108,6 +113,8 @@ function reducer(state: GameState, action: Action): GameState {
       return { ...state, stageIndex: state.stageIndex - 1, screen: state.screen - 1 }
     case "TOGGLE_DARK":
       return { ...state, dark: !state.dark }
+    case "SET_LANGUAGE":
+      return { ...state, language: action.lang }
     case "RESET_GAME":
       return {
         ...state,
@@ -163,6 +170,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement
     root.classList.toggle("dark", state.dark)
   }, [state])
+
+  // sync i18n language with persisted state
+  useEffect(() => {
+    try {
+      if (state.language) i18n.changeLanguage(state.language)
+    } catch {
+      /* ignore */
+    }
+  }, [state.language])
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

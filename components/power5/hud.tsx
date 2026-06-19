@@ -3,6 +3,7 @@
 import { Zap, Hand } from "lucide-react"
 import { motion } from "motion/react"
 import { useGame } from "@/lib/power5/game-context"
+import { useTranslation } from 'react-i18next'
 import { getTheme } from "@/lib/power5/themes"
 import { ScoreCounter } from "./score-counter"
 import { ThemeToggle } from "./theme-toggle"
@@ -22,6 +23,7 @@ function Logo() {
 
 export function Hud({ variant }: { variant: "dashboard" | "game" }) {
   const { state } = useGame()
+  const { t } = useTranslation()
   const theme = getTheme(state.themeId)
   const total = theme?.scenarios.length ?? 5
 
@@ -86,7 +88,7 @@ export function Hud({ variant }: { variant: "dashboard" | "game" }) {
           <div className="flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1.5 font-heading text-sm font-bold text-primary">
             <Zap className="h-4 w-4" fill="currentColor" />
             <ScoreCounter value={state.score} />
-            <span className="text-primary/70">pts</span>
+            <span className="text-primary/70">{t('pts')}</span>
           </div>
 
           <ThemeToggle />

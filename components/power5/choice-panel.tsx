@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion } from "motion/react"
 import { ArrowRight, Check, X, Minus } from "lucide-react"
 import type { Choice, Scenario } from "@/lib/power5/types"
@@ -47,6 +48,7 @@ export function ChoicePanel({
   const answeredChoice = answeredKey
     ? scenario.choices.find((c) => c.key === answeredKey)
     : undefined
+  const { t } = useTranslation()
 
   const handlePick = (choice: Choice) => {
     if (answeredKey) return
@@ -93,7 +95,7 @@ export function ChoicePanel({
         </p>
       </div>
           <h3 className="font-heading text-base text-center font-bold sm:text-lg">
-            What do you do?
+            {t('what_do_you_do')}
           </h3>
           {/* <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">
             {scenario.principle}
@@ -154,7 +156,7 @@ export function ChoicePanel({
                           pointsTone(choice.points),
                         )}
                       >
-                        {pointsLabel(choice.points)} pts
+                        {pointsLabel(choice.points)} {t('pts')}
                       </motion.span>
                     )}
                   </AnimatePresence>
@@ -211,9 +213,7 @@ export function ChoicePanel({
                     : "text-foreground",
                 )}
               >
-                {answeredChoice.points >= 10
-                  ? "Excellent. That's the power move."
-                  : "Review the feedback above, then continue."}
+                {answeredChoice.points >= 10 ? t('excellent_msg') : t('review_continue')}
               </p>
               <motion.button
                 type="button"
@@ -222,7 +222,7 @@ export function ChoicePanel({
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-heading text-sm font-bold text-primary-foreground shadow-lg"
               >
-                {isLast ? "See Results" : "Next Level"}
+                {isLast ? t('see_results') : t('next_level')}
                 <ArrowRight className="h-4 w-4" />
               </motion.button>
             </motion.div>

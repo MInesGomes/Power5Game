@@ -3,6 +3,7 @@
 import { Trophy, Medal, Award } from "lucide-react"
 import { motion } from "motion/react"
 import { useGame } from "@/lib/power5/game-context"
+import { useTranslation } from 'react-i18next'
 import { cn } from "@/lib/utils"
 
 interface Row {
@@ -21,10 +22,11 @@ const rankColor = ["text-amber-500", "text-slate-400", "text-orange-700 dark:tex
 
 export function Leaderboard() {
   const { state } = useGame()
+  const { t } = useTranslation()
 
   const rows: (Row & { you?: boolean })[] = [
     ...baseRows,
-    ...(state.score !== 0 ? [{ name: "You", score: state.score, you: true }] : []),
+    ...(state.score !== 0 ? [{ name: t('you') as string, score: state.score, you: true }] : []),
   ]
     .sort((a, b) => b.score - a.score)
     .slice(0, 5)
@@ -36,7 +38,7 @@ export function Leaderboard() {
     >
       <div className="mb-4 flex items-center gap-2">
         <Trophy className="h-5 w-5 text-primary" />
-        <h2 className="font-heading text-lg font-bold">Leaderboard</h2>
+        <h2 className="font-heading text-lg font-bold">{t('leaderboard_title')}</h2>
       </div>
       <ul className="flex flex-col gap-2">
         {rows.map((row, i) => {
@@ -57,7 +59,7 @@ export function Leaderboard() {
               </span>
               <span className="flex-1 font-medium">{row.name}</span>
               <span className="font-heading font-bold tabular-nums">{row.score.toLocaleString()}</span>
-              <span className="text-xs text-muted-foreground">pts</span>
+              <span className="text-xs text-muted-foreground">{t('pts')}</span>
             </motion.li>
           )
         })}
