@@ -4,20 +4,20 @@ import { Moon, Sun } from "lucide-react"
 import { motion } from "motion/react"
 import { useGame } from "@/lib/power5/game-context"
 import { cn } from "@/lib/utils"
-import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { state, dispatch } = useGame()
   const dark = state.dark
-  const { t } = useTranslation()
+  // use a stable aria-label to avoid SSR/client hydration mismatches
+  const stableAriaLabel = 'Toggle color theme'
 
   return (
     <div className={cn('flex items-center', className)}>
       <button
         type="button"
         onClick={() => dispatch({ type: "TOGGLE_DARK" })}
-        aria-label={dark ? (t('theme_light') as string) : (t('theme_dark') as string)}
+        aria-label={stableAriaLabel}
         className={cn(
           "relative inline-flex h-9 w-16 items-center rounded-full border border-border bg-secondary px-1 transition-colors",
         )}
