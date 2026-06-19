@@ -23,4 +23,12 @@
   "run_message_high": "Power Master! You lead with ownership, focus, and empathy.",
   "run_message_mid": "Strong work. Your instincts are sharpening fast.",
   "run_message_low": "Solid effort. Review the feedback and run it back."
+  ,
+  "skills": {
+    "own": "Leader",
+    "prioritize": "Prioritize",
+    "collaborate": "Collaborate",
+    "listen": "Listen",
+    "recharge": "Recharge"
+  }
 }

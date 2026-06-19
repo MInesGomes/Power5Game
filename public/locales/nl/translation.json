@@ -23,4 +23,12 @@
   "run_message_high": "Power Master! Je leidt met eigenaarschap, focus en empathie.",
   "run_message_mid": "Sterk werk. Je instincten worden snel beter.",
   "run_message_low": "Stevige inspanning. Bekijk de feedback en probeer het opnieuw."
+  ,
+  "skills": {
+    "own": "Leider",
+    "prioritize": "Prioriteren",
+    "collaborate": "Samenwerken",
+    "listen": "Luisteren",
+    "recharge": "Opladen"
+  }
 }

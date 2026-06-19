@@ -21,6 +21,14 @@ function Logo() {
   )
 }
 
+const skills = [
+  { n: 1, key: "own" },
+  { n: 2, key: "prioritize" },
+  { n: 3, key: "collaborate" },
+  { n: 4, key: "listen" },
+  { n: 5, key: "recharge" },
+]
+
 export function Hud({ variant }: { variant: "dashboard" | "game" }) {
   const { state } = useGame()
   const { t } = useTranslation()
@@ -29,71 +37,77 @@ export function Hud({ variant }: { variant: "dashboard" | "game" }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
-        <Logo />
+      <div className="mx-auto max-w-6xl px-4 py-3">
+        {/* main row: logo, optional progress/badges, skills (scrollable), controls */}
+        <div className="flex items-center gap-3">
+          <Logo />
 
-        {variant === "game" && (
-          <div className="ml-2 hidden items-center gap-1.5 sm:flex">
-            {Array.from({ length: total }).map((_, i) => {
-              const done = i < state.stageIndex
-              const current = i === state.stageIndex
-              return (
-                <div key={i} className="flex items-center gap-1.5">
-                  <motion.span
-                    animate={{ scale: current ? 1.15 : 1 }}
-                    className={cn(
-                      "flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold transition-colors",
-                      done && "bg-primary text-primary-foreground",
-                      current && "bg-primary text-primary-foreground ring-2 ring-primary/40 ring-offset-2 ring-offset-background",
-                      !done && !current && "bg-secondary text-muted-foreground",
-                    )}
-                  >
-                    {i + 1}
-                  </motion.span>
-                  {i < total - 1 && (
-                    <span
+          {variant === "game" && (
+            <div className="ml-2 hidden items-center gap-1.5 sm:flex">
+              {Array.from({ length: total }).map((_, i) => {
+                const done = i < state.stageIndex
+                const current = i === state.stageIndex
+                return (
+                  <div key={i} className="flex items-center gap-1.5">
+                    <motion.span
+                      animate={{ scale: current ? 1.15 : 1 }}
                       className={cn(
-                        "h-0.5 w-3 rounded-full",
-                        i < state.stageIndex ? "bg-primary" : "bg-border",
+                        "flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold transition-colors",
+                        done && "bg-primary text-primary-foreground",
+                        current && "bg-primary text-primary-foreground ring-2 ring-primary/40 ring-offset-2 ring-offset-background",
+                        !done && !current && "bg-secondary text-muted-foreground",
                       )}
-                    />
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        )}
-
-        {variant === "dashboard" && state.badges.length > 0 && (
-          <div className="ml-2 hidden flex-wrap items-center gap-1.5 md:flex">
-            {state.badges.slice(0, 4).map((b) => (
-              <span
-                key={b}
-                className="rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-semibold text-primary"
-              >
-                {b}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="ml-auto flex items-center gap-3">
-          {variant === "game" && theme && (
-            <span className="hidden items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground sm:flex">
-              <ThemeIcon name={theme.icon} className="h-3.5 w-3.5" />
-              {theme.label}
-            </span>
+                    >
+                      {i + 1}
+                    </motion.span>
+                    {i < total - 1 && (
+                      <span className={cn("h-0.5 w-3 rounded-full", i < state.stageIndex ? "bg-primary" : "bg-border")} />
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           )}
 
-          <div className="flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1.5 font-heading text-sm font-bold text-primary">
-            <Zap className="h-4 w-4" fill="currentColor" />
-            <ScoreCounter value={state.score} />
-            <span className="text-primary/70">{t('pts')}</span>
-          </div>
+          {variant === "dashboard" && state.badges.length > 0 && (
+            <div className="ml-2 hidden flex-wrap items-center gap-1.5 md:flex">
+              {state.badges.slice(0, 4).map((b) => (
+                <span key={b} className="rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-semibold text-primary">{b}</span>
+              ))}
+            </div>
+          )}
 
-          <ThemeToggle />
+          {variant === "dashboard" && (
+            <div className="flex-1 flex items-center gap-2 overflow-x-auto pb-1 whitespace-nowrap">
+              {skills.map((skill) => (
+                <span key={skill.n} className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-2 py-0.5 text-xs font-semibold text-foreground shadow-sm whitespace-nowrap sm:px-3 sm:py-1 sm:text-sm">
+                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground sm:h-5 sm:w-5 sm:text-xs">{skill.n}</span>
+                  {t('skills.' + skill.key)}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="ml-auto flex items-center gap-3">
+            {variant === "game" && theme && (
+              <span className="hidden items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground sm:flex">
+                <ThemeIcon name={theme.icon} className="h-3.5 w-3.5" />
+                {theme.label}
+              </span>
+            )}
+
+            <div className="flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1.5 font-heading text-sm font-bold text-primary">
+              <Zap className="h-4 w-4" fill="currentColor" />
+              <ScoreCounter value={state.score} />
+              <span className="text-primary/70">{t('pts')}</span>
+            </div>
+
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>
   )
 }
+
+export default Hud

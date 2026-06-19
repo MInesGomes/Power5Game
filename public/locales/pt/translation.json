@@ -23,4 +23,12 @@
   "run_message_high": "Mestre! Lidera com propriedade, foco e empatia.",
   "run_message_mid": "Bom trabalho. Seus instintos estão a melhorar rapidamente.",
   "run_message_low": "Bom esforço. Reveja o feedback e tente novamente."
+  ,
+  "skills": {
+    "own": "Liderar",
+    "prioritize": "Priorizar",
+    "collaborate": "Colaborar",
+    "listen": "Ouvir",
+    "recharge": "Recarregar"
+  }
 }
