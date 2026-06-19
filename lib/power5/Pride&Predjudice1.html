@@ -1,0 +1,845 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Regency Parlor at Twilight</title>
+<style>
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; overflow: hidden; height: 100%; background: #05070a; font-family: 'Georgia', 'Times New Roman', serif; color: #f3e5ab; }
+#canvas-container { position: absolute; inset: 0; }
+.ui-layer { position: absolute; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 22px; }
+#title { text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
+#title h1 { margin: 0; font-size: clamp(1.6rem, 4.5vw, 3.2rem); letter-spacing: 2px; color: #f3e5ab; }
+#title p { margin: 0.4rem 0 0; font-style: italic; color: #cbb682; font-size: clamp(0.9rem, 2vw, 1.2rem); }
+#instruction { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: rgba(10,7,4,0.65); padding: 1.1rem 2rem; border: 1px solid #a88b4a; border-radius: 4px; transition: opacity 0.5s; pointer-events: auto; }
+#instruction.hidden { opacity: 0; pointer-events: none; }
+#choices { position: absolute; bottom: 6%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 10px; align-items: center; transition: opacity 0.5s; pointer-events: auto; z-index: 20; }
+#choices.hidden { opacity: 0; pointer-events: none; }
+.choice-btn { background: rgba(20,15,10,0.9); color: #f3e5ab; border: 1px solid #a88b4a; padding: 0.75rem 1.2rem; font-family: inherit; font-size: clamp(0.85rem, 2vw, 1.05rem); cursor: pointer; border-radius: 4px; width: min(90vw, 460px); text-align: left; transition: background 0.2s, transform 0.2s; }
+.choice-btn:hover { background: rgba(60,45,25,0.95); transform: translateY(-2px); }
+.choice-label { color: #d4af37; font-weight: bold; margin-right: 0.6rem; }
+.speech-bubble { position: absolute; max-width: 280px; background: rgba(252,245,225,0.96); color: #2b2118; padding: 0.8rem 1rem; border-radius: 14px; border: 1px solid #8b7355; font-size: 0.98rem; line-height: 1.35; opacity: 0; transform: translate(-50%, -120%) scale(0.92); transition: opacity 0.3s, transform 0.3s; pointer-events: none; box-shadow: 0 5px 18px rgba(0,0,0,0.35); z-index: 15; }
+.speech-bubble::after { content: ''; position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%); border-width: 9px 9px 0; border-style: solid; border-color: rgba(252,245,225,0.96) transparent transparent; }
+.speech-bubble.visible { opacity: 1; transform: translate(-50%, -125%) scale(1); }
+#outcome { position: absolute; inset: 0; background: rgba(0,0,0,0.78); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 30; }
+#outcome:not(.hidden) { opacity: 1; pointer-events: auto; }
+.outcome-box { background: rgba(20,15,10,0.96); border: 1px solid #a88b4a; padding: 2rem; border-radius: 6px; max-width: 520px; text-align: center; }
+.outcome-text { font-size: 1.25rem; margin-bottom: 1.5rem; line-height: 1.55; }
+.restart-btn { background: #a88b4a; color: #1a120b; border: none; padding: 0.7rem 1.6rem; font-family: inherit; font-size: 1.05rem; cursor: pointer; border-radius: 4px; }
+.restart-btn:hover { background: #d4af37; }
+</style>
+</head>
+<body>
+<div id="canvas-container"></div>
+
+<div class="ui-layer">
+  <div id="title">
+    <h1>A Regency Parlor at Twilight</h1>
+    <p>Click Mr. Darcy or Elizabeth to begin</p>
+  </div>
+</div>
+
+<div id="instruction">
+  <p>Click on a character to begin the scene.</p>
+</div>
+
+<div id="choices" class="hidden">
+  <button class="choice-btn" onclick="chooseOption('A')"><span class="choice-label">A</span>Give him quiet space in the library.</button>
+  <button class="choice-btn" onclick="chooseOption('B')"><span class="choice-label">B</span>Stay silent but feel rejected.</button>
+  <button class="choice-btn" onclick="chooseOption('C')"><span class="choice-label">C</span>Follow him and demand he talks.</button>
+  <button class="choice-btn" onclick="chooseOption('D')"><span class="choice-label">D</span>Accuse him of being selfish.</button>
+</div>
+
+<div id="bubble-elizabeth" class="speech-bubble"></div>
+<div id="bubble-darcy" class="speech-bubble"></div>
+
+<div id="outcome" class="hidden">
+  <div class="outcome-box">
+    <p class="outcome-text"></p>
+    <button class="restart-btn" onclick="restart()">Return to the Parlor</button>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const container = document.getElementById('canvas-container');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b1016);
+scene.fog = new THREE.FogExp2(0x0b1016, 0.07);
+
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(3.6, 2.3, 5.4);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 1.1, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.35;
+controls.maxPolarAngle = Math.PI / 2 - 0.04;
+controls.minDistance = 2.5;
+controls.maxDistance = 9;
+
+const ambient = new THREE.AmbientLight(0x334055, 0.55);
+scene.add(ambient);
+
+const moonLight = new THREE.DirectionalLight(0x8faaff, 0.3);
+moonLight.position.set(-8, 6, -2);
+moonLight.castShadow = true;
+moonLight.shadow.mapSize.set(1024, 1024);
+scene.add(moonLight);
+
+const fireLight = new THREE.PointLight(0xff6a00, 2.6, 9);
+fireLight.position.set(0, 1.1, -5.5);
+fireLight.castShadow = true;
+fireLight.shadow.mapSize.set(1024, 1024);
+fireLight.shadow.bias = -0.0005;
+scene.add(fireLight);
+
+let darcyRoot, darcyTorsoPivot, darcyHead;
+const darcyShoulders = { left: null, right: null };
+const darcyElbows = { left: null, right: null };
+const darcyHips = { left: null, right: null };
+const darcyKnees = { left: null, right: null };
+let elizabethRoot, elizabethHead;
+const elizabethShoulders = { left: null, right: null };
+const elizabethElbows = { left: null, right: null };
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+const clock = new THREE.Clock();
+const tweens = [];
+let fireParticles = [];
+
+const uiInstruction = document.getElementById('instruction');
+const choicesEl = document.getElementById('choices');
+const bubbleE = document.getElementById('bubble-elizabeth');
+const bubbleD = document.getElementById('bubble-darcy');
+const outcomeEl = document.getElementById('outcome');
+const outcomeText = outcomeEl.querySelector('.outcome-text');
+
+let gameState = 'idle';
+let selectedVoices = { female: null, male: null };
+
+function selectVoice(voices, gender) {
+  const en = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+  if (gender === 'female') {
+    const names = /samantha|google|female|susan|hazel|zira|karen|tessa|serena|moira|fiona|alice|emily|ava|sophie|emma/;
+    let v = en.find(v => names.test(v.name));
+    if (!v) v = en.find(v => v.lang.toLowerCase().startsWith('en-gb'));
+    return v || en[0] || en[1] || en[2];
+  } else {
+    const names = /male|george|ryan|daniel|peter|alex|fred|david|james|thomas|arthur/;
+    let v = en.find(v => names.test(v.name));
+    if (!v) v = en.find(v => v.lang.toLowerCase().startsWith('en-gb'));
+    return v || en[0];
+  }
+}
+
+function loadVoices() {
+  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  selectedVoices.female = selectVoice(voices, 'female');
+  selectedVoices.male = selectVoice(voices, 'male');
+}
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+
+function speak(text, voiceType, bubbleEl, anchor) {
+  return new Promise((resolve) => {
+    if (!text) { resolve(); return; }
+    bubbleEl.textContent = text;
+    bubbleEl.classList.add('visible');
+    positionBubble(bubbleEl, anchor);
+    if (!window.speechSynthesis) {
+      setTimeout(() => { bubbleEl.classList.remove('visible'); resolve(); }, Math.max(1600, text.length * 75));
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    const v = voiceType === 'female' ? selectedVoices.female : selectedVoices.male;
+    if (v) utter.voice = v;
+    utter.lang = v ? v.lang : 'en-GB';
+    // utter.pitch = voiceType === 'female' ? 1.05 : 0.82;
+    // utter.rate = voiceType === 'female' ? 0.95 : 0.68;
+    // utter.volume = voiceType === 'female' ? 1 : 0.72;
+    utter.pitch = voiceType === 'female' ? 4.25 : 0.82; 
+    utter.rate = voiceType === 'female' ? 1.10 : 0.68;  
+    utter.volume = voiceType === 'female' ? 1.00 : 0.72; 
+    let settled = false;
+    const fallbackMs = Math.max(2200, (text.length * 90) / utter.rate);
+    const timer = setTimeout(() => {
+      if (!settled) { settled = true; bubbleEl.classList.remove('visible'); resolve(); }
+    }, fallbackMs);
+    utter.onend = () => { if (!settled) { settled = true; clearTimeout(timer); bubbleEl.classList.remove('visible'); resolve(); } };
+    utter.onerror = () => { if (!settled) { settled = true; clearTimeout(timer); bubbleEl.classList.remove('visible'); resolve(); } };
+    setTimeout(() => window.speechSynthesis.speak(utter), 60);
+  });
+}
+
+function positionBubble(el, anchor) {
+  const pos = new THREE.Vector3();
+  anchor.getWorldPosition(pos);
+  pos.y += 0.38;
+  pos.project(camera);
+  const x = (pos.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-pos.y * 0.5 + 0.5) * window.innerHeight;
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+}
+
+function startTween(update, duration, onComplete) {
+  tweens.push({ update, duration, onComplete, t: 0 });
+}
+
+function createRoom() {
+  const wallMat = new THREE.MeshStandardMaterial({ color: 0xcfc4b5, roughness: 0.9 });
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0x3d2616, roughness: 0.9 });
+
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  const backWall = new THREE.Mesh(new THREE.PlaneGeometry(14, 7), wallMat);
+  backWall.position.set(0, 3.5, -7);
+  backWall.receiveShadow = true;
+  scene.add(backWall);
+
+  const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(14, 7), wallMat);
+  leftWall.rotation.y = Math.PI / 2;
+  leftWall.position.set(-7, 3.5, 0);
+  leftWall.receiveShadow = true;
+  scene.add(leftWall);
+
+  const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(14, 7), wallMat);
+  rightWall.rotation.y = -Math.PI / 2;
+  rightWall.position.set(7, 3.5, 0);
+  rightWall.receiveShadow = true;
+  scene.add(rightWall);
+
+  const winGlass = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 3.2), new THREE.MeshBasicMaterial({ color: 0x1a2a45 }));
+  winGlass.position.set(-6.94, 3.4, 0);
+  winGlass.rotation.y = Math.PI / 2;
+  scene.add(winGlass);
+
+  const frameMat = new THREE.MeshStandardMaterial({ color: 0x2a1d12 });
+  const frameV = new THREE.Mesh(new THREE.BoxGeometry(0.12, 3.4, 0.12), frameMat);
+  frameV.position.set(-6.88, 3.4, 0);
+  frameV.rotation.y = Math.PI / 2;
+  scene.add(frameV);
+  const frameH = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.12, 2.4), frameMat);
+  frameH.position.set(-6.88, 4.5, 0);
+  frameH.rotation.y = Math.PI / 2;
+  scene.add(frameH);
+  const frameH2 = frameH.clone();
+  frameH2.position.set(-6.88, 2.3, 0);
+  scene.add(frameH2);
+
+  const doorMat = new THREE.MeshBasicMaterial({ color: 0x05070a });
+  const door = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 3), doorMat);
+  door.position.set(6.94, 1.5, -1);
+  door.rotation.y = -Math.PI / 2;
+  scene.add(door);
+
+  const dFrameMat = new THREE.MeshStandardMaterial({ color: 0x3e2b1b });
+  const dfTop = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 1.9), dFrameMat);
+  dfTop.position.set(6.88, 3, -1);
+  scene.add(dfTop);
+  const dfLeft = new THREE.Mesh(new THREE.BoxGeometry(0.12, 3, 0.12), dFrameMat);
+  dfLeft.position.set(6.88, 1.5, -1.95);
+  scene.add(dfLeft);
+  const dfRight = dfLeft.clone();
+  dfRight.position.set(6.88, 1.5, -0.05);
+  scene.add(dfRight);
+
+  const rugCanvas = document.createElement('canvas');
+  rugCanvas.width = 512; rugCanvas.height = 512;
+  const ctx = rugCanvas.getContext('2d');
+  ctx.fillStyle = '#5c2a2a'; ctx.fillRect(0, 0, 512, 512);
+  ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 22; ctx.strokeRect(28, 28, 456, 456);
+  ctx.strokeRect(70, 70, 372, 372);
+  ctx.fillStyle = 'rgba(212,175,55,0.15)'; ctx.fillRect(90, 90, 332, 332);
+  const rugTex = new THREE.CanvasTexture(rugCanvas);
+  const rug = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 7.5), new THREE.MeshStandardMaterial({ map: rugTex, roughness: 0.8 }));
+  rug.rotation.x = -Math.PI / 2;
+  rug.position.set(0, 0.015, -2.2);
+  rug.receiveShadow = true;
+  scene.add(rug);
+}
+
+function createFireplace() {
+  const group = new THREE.Group();
+  group.position.set(0, 0, -6.9);
+  scene.add(group);
+  const stoneMat = new THREE.MeshStandardMaterial({ color: 0x5a4d41, roughness: 0.9 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: 0x1a1512, roughness: 1 });
+
+  const hearth = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.22, 0.9), stoneMat);
+  hearth.position.set(0, 0.11, 0.35);
+  hearth.receiveShadow = true; hearth.castShadow = true;
+  group.add(hearth);
+
+  const mantel = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.28, 0.55), stoneMat);
+  mantel.position.set(0, 2.3, 0.2);
+  mantel.castShadow = true;
+  group.add(mantel);
+
+  const back = new THREE.Mesh(new THREE.BoxGeometry(1.8, 2.2, 0.18), darkMat);
+  back.position.set(0, 1.2, -0.05);
+  group.add(back);
+
+  const sideL = new THREE.Mesh(new THREE.BoxGeometry(0.22, 2.2, 0.7), stoneMat);
+  sideL.position.set(-1.05, 1.2, 0.25);
+  group.add(sideL);
+  const sideR = sideL.clone();
+  sideR.position.set(1.05, 1.2, 0.25);
+  group.add(sideR);
+
+  function addCandle(x) {
+    const cg = new THREE.Group();
+    cg.position.set(x, 2.55, 0.22);
+    const stick = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.28), new THREE.MeshStandardMaterial({ color: 0xeaddcf }));
+    cg.add(stick);
+    const flame = new THREE.Mesh(new THREE.SphereGeometry(0.05), new THREE.MeshBasicMaterial({ color: 0xffaa33 }));
+    flame.position.y = 0.17;
+    cg.add(flame);
+    const cl = new THREE.PointLight(0xffaa55, 0.45, 3);
+    cl.position.y = 0.22;
+    cg.add(cl);
+    group.add(cg);
+  }
+  addCandle(-1.0); addCandle(1.0);
+}
+
+function createChair() {
+  const chair = new THREE.Group();
+  const woodMat = new THREE.MeshStandardMaterial({ color: 0x4a3020, roughness: 0.85 });
+  const fabricMat = new THREE.MeshStandardMaterial({ color: 0x2f4f4f, roughness: 0.9 });
+
+  for (let x of [-0.35, 0.35]) {
+    for (let z of [-0.35, 0.35]) {
+      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.03, 0.48), woodMat);
+      leg.position.set(x, 0.24, z);
+      leg.castShadow = true;
+      chair.add(leg);
+    }
+  }
+  const seat = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.12, 0.9), fabricMat);
+  seat.position.set(0, 0.5, 0);
+  seat.castShadow = true; seat.receiveShadow = true;
+  chair.add(seat);
+
+  const back = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1, 0.12), fabricMat);
+  back.position.set(0, 1.05, -0.4);
+  back.castShadow = true;
+  chair.add(back);
+
+  const armL = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.15, 0.75), fabricMat);
+  armL.position.set(-0.44, 0.82, 0.05);
+  armL.castShadow = true;
+  chair.add(armL);
+  const armR = armL.clone();
+  armR.position.set(0.44, 0.82, 0.05);
+  chair.add(armR);
+
+  return chair;
+}
+
+function createFurniture() {
+  const chair = createChair();
+  chair.position.set(2, 0, -4.1);
+  chair.rotation.y = -Math.PI / 3;
+  scene.add(chair);
+
+  const table = new THREE.Group();
+  const woodMat = new THREE.MeshStandardMaterial({ color: 0x3d2616, roughness: 0.8 });
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.06, 32), woodMat);
+  top.position.y = 0.72;
+  top.castShadow = true;
+  table.add(top);
+  const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.04, 0.72), woodMat);
+  leg.position.y = 0.36;
+  leg.castShadow = true;
+  table.add(leg);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.06), woodMat);
+  base.position.y = 0.03;
+  table.add(base);
+  table.position.set(-0.7, 0, -3.1);
+  scene.add(table);
+}
+
+function createFire() {
+  const group = new THREE.Group();
+  group.position.set(0, 0.55, -6.55);
+  scene.add(group);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 64; canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,255,200,1)');
+  g.addColorStop(0.4, 'rgba(255,120,0,0.65)');
+  g.addColorStop(1, 'rgba(255,60,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
+  const tex = new THREE.CanvasTexture(canvas);
+
+  for (let i = 0; i < 65; i++) {
+    const mat = new THREE.SpriteMaterial({ map: tex, color: 0xff6600, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false });
+    const p = new THREE.Sprite(mat);
+    resetFireParticle(p);
+    p.userData.life = Math.random() * p.userData.maxLife;
+    group.add(p);
+    fireParticles.push(p);
+  }
+}
+
+function resetFireParticle(p) {
+  p.position.set((Math.random() - 0.5) * 0.45, Math.random() * 0.15, (Math.random() - 0.5) * 0.28);
+  const s = 0.15 + Math.random() * 0.28;
+  p.scale.setScalar(s);
+  p.material.opacity = 0.6 + Math.random() * 0.4;
+  p.userData.velocity = new THREE.Vector3((Math.random() - 0.5) * 0.12, 0.35 + Math.random() * 0.45, (Math.random() - 0.5) * 0.12);
+  p.userData.life = 0;
+  p.userData.maxLife = 0.7 + Math.random() * 0.7;
+}
+
+function createDarcy() {
+  darcyRoot = new THREE.Group();
+  darcyRoot.position.set(2, 0, -4.1);
+  darcyRoot.rotation.y = -Math.PI / 4;
+  scene.add(darcyRoot);
+
+  const suitMat = new THREE.MeshStandardMaterial({ color: 0x1a1f2e, roughness: 0.7 });
+  const skinMat = new THREE.MeshStandardMaterial({ color: 0xf5d0b0, roughness: 0.5 });
+  const hairMat = new THREE.MeshStandardMaterial({ color: 0x0d0d0d, roughness: 0.9 });
+  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 });
+
+  darcyTorsoPivot = new THREE.Group();
+  darcyTorsoPivot.position.set(0, 0.55, 0.12);
+  darcyRoot.add(darcyTorsoPivot);
+
+  const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.3, 0.9, 18), suitMat);
+  torso.position.y = 0.45;
+  torso.castShadow = true;
+  darcyTorsoPivot.add(torso);
+
+  const cravat = new THREE.Mesh(new THREE.SphereGeometry(0.08), whiteMat);
+  cravat.position.set(0, 0.88, 0.08);
+  darcyTorsoPivot.add(cravat);
+
+  const headGroup = new THREE.Group();
+  headGroup.position.set(0, 0.96, 0);
+  darcyTorsoPivot.add(headGroup);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.17, 24, 24), skinMat);
+  head.castShadow = true;
+  headGroup.add(head);
+  const hair = new THREE.Mesh(new THREE.SphereGeometry(0.185, 24, 24, 0, Math.PI * 2, 0, Math.PI / 2), hairMat);
+  hair.scale.y = 0.75;
+  hair.position.y = 0.02;
+  headGroup.add(hair);
+  darcyHead = headGroup;
+
+  [-1, 1].forEach((side, i) => {
+    const shoulder = new THREE.Group();
+    shoulder.position.set(side * 0.32, 0.78, 0);
+    darcyTorsoPivot.add(shoulder);
+    const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.45), suitMat);
+    upperArm.position.y = -0.225;
+    upperArm.castShadow = true;
+    shoulder.add(upperArm);
+    const elbow = new THREE.Group();
+    elbow.position.y = -0.45;
+    shoulder.add(elbow);
+    const foreArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.4), suitMat);
+    foreArm.position.y = -0.2;
+    foreArm.castShadow = true;
+    elbow.add(foreArm);
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.06), skinMat);
+    hand.position.y = -0.42;
+    elbow.add(hand);
+    shoulder.rotation.x = -0.2;
+    elbow.rotation.x = -1.35;
+
+    if (i === 0) { darcyShoulders.left = shoulder; darcyElbows.left = elbow; }
+    else { darcyShoulders.right = shoulder; darcyElbows.right = elbow; }
+  });
+
+  [-1, 1].forEach((side, i) => {
+    const hip = new THREE.Group();
+    hip.position.set(side * 0.14, 0.55, 0.18);
+    darcyRoot.add(hip);
+    const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.5), suitMat);
+    thigh.position.y = -0.25;
+    thigh.castShadow = true;
+    hip.add(thigh);
+    const knee = new THREE.Group();
+    knee.position.y = -0.5;
+    hip.add(knee);
+    const shin = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.07, 0.5), suitMat);
+    shin.position.y = -0.25;
+    shin.castShadow = true;
+    knee.add(shin);
+    const foot = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.08, 0.24), new THREE.MeshStandardMaterial({ color: 0x0a0a0a }));
+    foot.position.set(0, -0.55, 0.06);
+    knee.add(foot);
+    hip.rotation.x = -Math.PI / 2;
+    knee.rotation.x = Math.PI / 2;
+
+    if (i === 0) { darcyHips.left = hip; darcyKnees.left = knee; }
+    else { darcyHips.right = hip; darcyKnees.right = knee; }
+  });
+
+  darcyTorsoPivot.rotation.x = 0.42;
+  darcyHead.rotation.x = 0.55;
+
+  const clicker = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.9, 0.9), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }));
+  clicker.position.set(0, 0.95, 0);
+  clicker.userData.character = 'darcy';
+  darcyRoot.add(clicker);
+}
+
+function createElizabeth() {
+  elizabethRoot = new THREE.Group();
+  elizabethRoot.position.set(-1.4, 0, -3.2);
+  elizabethRoot.rotation.y = Math.PI / 4;
+  scene.add(elizabethRoot);
+
+  const dressMat = new THREE.MeshStandardMaterial({ color: 0xfdf5e6, roughness: 0.7 });
+  const skinMat = new THREE.MeshStandardMaterial({ color: 0xf5d0b0, roughness: 0.5 });
+  const hairMat = new THREE.MeshStandardMaterial({ color: 0x3e2723, roughness: 0.8 });
+
+  const dress = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.55, 1.7, 22), dressMat);
+  dress.position.y = 0.85;
+  dress.castShadow = true; dress.receiveShadow = true;
+  elizabethRoot.add(dress);
+
+  const torsoPivot = new THREE.Group();
+  torsoPivot.position.set(0, 1.65, 0);
+  elizabethRoot.add(torsoPivot);
+
+  const chest = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.28, 0.35), dressMat);
+  chest.position.y = 0.16;
+  chest.castShadow = true;
+  torsoPivot.add(chest);
+
+  const headGroup = new THREE.Group();
+  headGroup.position.set(0, 0.46, 0);
+  torsoPivot.add(headGroup);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 24), skinMat);
+  head.castShadow = true;
+  headGroup.add(head);
+  const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.17, 24, 24, 0, Math.PI * 2, 0, Math.PI / 2), hairMat);
+  hairCap.position.y = 0.02;
+  headGroup.add(hairCap);
+  const bun = new THREE.Mesh(new THREE.SphereGeometry(0.11), hairMat);
+  bun.position.set(0, 0.13, -0.12);
+  headGroup.add(bun);
+  elizabethHead = headGroup;
+
+  [-1, 1].forEach((side, i) => {
+    const shoulder = new THREE.Group();
+    shoulder.position.set(side * 0.22, 0.26, 0);
+    torsoPivot.add(shoulder);
+    const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.05, 0.4), dressMat);
+    upperArm.position.y = -0.2;
+    upperArm.castShadow = true;
+    shoulder.add(upperArm);
+    const elbow = new THREE.Group();
+    elbow.position.y = -0.4;
+    shoulder.add(elbow);
+    const foreArm = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.04, 0.35), dressMat);
+    foreArm.position.y = -0.175;
+    foreArm.castShadow = true;
+    elbow.add(foreArm);
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.05), skinMat);
+    hand.position.y = -0.37;
+    elbow.add(hand);
+
+    if (side === 1) {
+      const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.04, 0.08), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+      cup.position.set(0, -0.37, 0);
+      elbow.add(cup);
+      const tea = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.015), new THREE.MeshStandardMaterial({ color: 0x3d1c02 }));
+      tea.position.y = 0.042;
+      cup.add(tea);
+      shoulder.rotation.z = -0.1;
+      shoulder.rotation.x = -0.25;
+      elbow.rotation.x = -1.5;
+    } else {
+      shoulder.rotation.z = 0.1;
+      elbow.rotation.x = -0.1;
+    }
+
+    if (i === 0) { elizabethShoulders.left = shoulder; elizabethElbows.left = elbow; }
+    else { elizabethShoulders.right = shoulder; elizabethElbows.right = elbow; }
+  });
+
+  const clicker = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.5, 1.85), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 }));
+  clicker.position.set(0, 0.9, 0);
+  clicker.userData.character = 'elizabeth';
+  elizabethRoot.add(clicker);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onPointerMove(event) {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true);
+  let hit = null;
+  for (let i = 0; i < intersects.length; i++) {
+    if (intersects[i].object.userData?.character) { hit = intersects[i].object.userData.character; break; }
+  }
+  document.body.style.cursor = hit ? 'pointer' : 'default';
+}
+
+function onClick(event) {
+  if (gameState !== 'idle') return;
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true);
+  let hit = null;
+  for (let i = 0; i < intersects.length; i++) {
+    if (intersects[i].object.userData?.character) { hit = intersects[i].object.userData.character; break; }
+  }
+  if (hit) startIntro();
+}
+
+async function startIntro() {
+  if (gameState !== 'idle') return;
+  gameState = 'intro';
+  controls.autoRotate = false;
+  uiInstruction.classList.add('hidden');
+  await speak("Mr. Darcy, are you quite well? You look so pale.", 'female', bubbleE, elizabethHead);
+  await speak("Not now, Elizabeth... I beg you, a little quiet.", 'male', bubbleD, darcyHead);
+  gameState = 'choosing';
+  choicesEl.classList.remove('hidden');
+}
+
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function showOutcome(text) {
+  outcomeText.textContent = text;
+  outcomeEl.classList.remove('hidden');
+}
+
+window.chooseOption = async function(choice) {
+  if (gameState !== 'choosing') return;
+  choicesEl.classList.add('hidden');
+  gameState = 'ending';
+  window.speechSynthesis.cancel();
+  bubbleE.classList.remove('visible');
+  bubbleD.classList.remove('visible');
+
+  if (choice === 'A') await playEndingA();
+  else if (choice === 'B') await playEndingB();
+  else if (choice === 'C') await playEndingC();
+  else if (choice === 'D') await playEndingD();
+};
+
+window.restart = function() { location.reload(); };
+
+function tweenDarcyRelax() {
+  const startTX = darcyTorsoPivot.rotation.x;
+  const targetTX = -0.08;
+  const startHX = darcyHead.rotation.x;
+  const targetHX = -0.05;
+  const startHY = darcyHead.rotation.y || 0;
+  startTween((p) => {
+    darcyTorsoPivot.rotation.x = startTX + (targetTX - startTX) * p;
+    darcyHead.rotation.x = startHX + (targetHX - startHX) * p;
+    darcyHead.rotation.y = startHY * (1 - p);
+    darcyShoulders.left.rotation.x = -0.2 - 0.55 * p;
+    darcyShoulders.right.rotation.x = -0.2 - 0.55 * p;
+    darcyElbows.left.rotation.x = -1.35 + 1.15 * p;
+    darcyElbows.right.rotation.x = -1.35 + 1.15 * p;
+  }, 1.6);
+}
+
+async function playEndingA() {
+  tweenDarcyRelax();
+  await speak("I shall give you the quiet you need, dear. Come to the library when you are ready.", 'female', bubbleE, elizabethHead);
+  await speak("Thank you... I will. I promise.", 'male', bubbleD, darcyHead);
+  showOutcome("A quiet understanding. Darcy rests by the fire, and later they speak softly by candlelight.");
+}
+
+function tweenDarcyTurnAway() {
+  const startHY = darcyHead.rotation.y || 0;
+  startTween((p) => {
+    darcyHead.rotation.y = startHY - 0.85 * p;
+    darcyTorsoPivot.rotation.y = -0.15 * p;
+  }, 1.2);
+}
+
+async function playEndingB() {
+  tweenDarcyTurnAway();
+  bubbleE.textContent = "(You say nothing. The silence stretches.)";
+  bubbleE.classList.add('visible');
+  await wait(2600);
+  bubbleE.classList.remove('visible');
+  bubbleD.textContent = "(Darcy turns his shoulder. The room grows colder.)";
+  bubbleD.classList.add('visible');
+  await wait(3200);
+  bubbleD.classList.remove('visible');
+  showOutcome("Silent tension settles between you. Nothing is resolved tonight.");
+}
+
+function tweenElizabethStepCloser() {
+  const startX = elizabethRoot.position.x;
+  const startZ = elizabethRoot.position.z;
+  startTween((p) => {
+    elizabethRoot.position.x = startX + 0.45 * p;
+    elizabethRoot.position.z = startZ + 0.85 * p;
+    elizabethRoot.rotation.y = Math.PI / 4 - 0.25 * p;
+  }, 1.1);
+}
+
+function tweenDarcyStand(onComplete) {
+  const startY = darcyRoot.position.y;
+  const targetY = 0.6;
+  const startZ = darcyRoot.position.z;
+  const targetZ = -3.45;
+  const hipStartL = darcyHips.left.rotation.x;
+  const hipStartR = darcyHips.right.rotation.x;
+  const kneeStartL = darcyKnees.left.rotation.x;
+  const kneeStartR = darcyKnees.right.rotation.x;
+  startTween((p) => {
+    darcyRoot.position.y = startY + (targetY - startY) * p;
+    darcyRoot.position.z = startZ + (targetZ - startZ) * p;
+    darcyTorsoPivot.rotation.x = 0.42 * (1 - p);
+    darcyHead.rotation.x = 0.55 * (1 - p);
+    darcyHips.left.rotation.x = hipStartL * (1 - p);
+    darcyHips.right.rotation.x = hipStartR * (1 - p);
+    darcyKnees.left.rotation.x = kneeStartL * (1 - p);
+    darcyKnees.right.rotation.x = kneeStartR * (1 - p);
+  }, 1.3, onComplete);
+}
+
+async function playEndingC() {
+  tweenElizabethStepCloser();
+  await speak("Mr. Darcy, I cannot bear to see you suffer. Tell me what is wrong.", 'female', bubbleE, elizabethHead);
+  await new Promise(resolve => {
+    tweenDarcyStand(() => {
+      const startRot = darcyRoot.rotation.y;
+      startTween((p) => {
+        darcyRoot.rotation.y = startRot + (Math.PI - startRot) * p;
+      }, 1, resolve);
+    });
+  });
+  await speak("I cannot speak of it. Please, do not ask again.", 'male', bubbleD, darcyHead);
+  showOutcome("Darcy shuts down completely. The gulf between you only widens.");
+}
+
+async function playEndingD() {
+  await speak("You are being selfish, shutting me out after everything!", 'female', bubbleE, elizabethHead);
+  await new Promise(resolve => {
+    tweenDarcyStand(() => {
+      const startRot = darcyRoot.rotation.y;
+      const targetRot = Math.atan2(-1 - darcyRoot.position.z, 6.3 - darcyRoot.position.x);
+      startTween((p) => {
+        darcyRoot.rotation.y = startRot + (targetRot - startRot) * p;
+      }, 0.55, () => {
+        const startX = darcyRoot.position.x;
+        const startZ = darcyRoot.position.z;
+        const targetX = 6.8;
+        const targetZ = -1;
+        startTween((p) => {
+          darcyRoot.position.x = startX + (targetX - startX) * p;
+          darcyRoot.position.z = startZ + (targetZ - startZ) * p;
+          const s = Math.sin(p * 22) * 0.35;
+          darcyHips.left.rotation.x = -s;
+          darcyHips.right.rotation.x = s;
+          darcyKnees.left.rotation.x = Math.abs(s) * 0.7;
+          darcyKnees.right.rotation.x = Math.abs(s) * 0.7;
+          if (p > 0.82) {
+            darcyRoot.traverse(o => {
+              if (o.isMesh && o.material) { o.material.transparent = true; o.material.opacity = 1 - (p - 0.82) / 0.18; }
+            });
+          }
+        }, 2.2, () => { darcyRoot.visible = false; resolve(); });
+      });
+    });
+  });
+  await speak("Then I shall remove the burden of my company entirely.", 'male', bubbleD, darcyHead);
+  await wait(1200);
+  showOutcome("Darcy storms out into the dark grounds. The night swallows his footsteps.");
+}
+
+function updateFire(dt) {
+  fireParticles.forEach(p => {
+    p.position.addScaledVector(p.userData.velocity, dt);
+    p.userData.life += dt;
+    const lifeRatio = p.userData.life / p.userData.maxLife;
+    p.material.opacity = (1 - lifeRatio) * 0.8;
+    const s = p.scale.x * (1 - dt * 0.55);
+    p.scale.setScalar(Math.max(s, 0.04));
+    if (p.userData.life >= p.userData.maxLife) resetFireParticle(p);
+  });
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const time = clock.getElapsedTime();
+
+  controls.update();
+
+  fireLight.intensity = 2.4 + Math.sin(time * 11) * 0.35 + Math.cos(time * 27) * 0.25 + (Math.random() - 0.5) * 0.25;
+  updateFire(dt);
+
+  for (let i = tweens.length - 1; i >= 0; i--) {
+    const tw = tweens[i];
+    tw.t += dt;
+    const p = Math.min(tw.t / tw.duration, 1);
+    tw.update(p);
+    if (p >= 1) { if (tw.onComplete) tw.onComplete(); tweens.splice(i, 1); }
+  }
+
+  if (bubbleE.classList.contains('visible')) positionBubble(bubbleE, elizabethHead);
+  if (bubbleD.classList.contains('visible')) positionBubble(bubbleD, darcyHead);
+
+  renderer.render(scene, camera);
+}
+
+createRoom();
+createFireplace();
+createFurniture();
+createFire();
+createDarcy();
+createElizabeth();
+
+window.addEventListener('resize', onWindowResize);
+window.addEventListener('pointermove', onPointerMove);
+window.addEventListener('click', onClick);
+
+animate();
+</script>
+</body>
+</html>
