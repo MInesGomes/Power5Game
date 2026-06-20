@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { ArrowLeft, Home } from "lucide-react"
 import { useGame } from "@/lib/power5/game-context"
 import { getTheme } from "@/lib/power5/themes"
+import { useCurrentThemeScenarios } from "@/lib/hooks/useOfficeScenarios"
 import { Hud } from "./hud"
 import { Scene3D } from "./scene-3d"
 import { ChoicePanel } from "./choice-panel"
@@ -13,12 +14,13 @@ import { FinalModal } from "./final-modal"
 export function GameplayScreen() {
   const { state, dispatch } = useGame()
   const theme = getTheme(state.themeId)
+  const scenarios = useCurrentThemeScenarios()
   const [hoverBack, setHoverBack] = useState(false)
 
   if (!theme) return null
-  const scenario = theme.scenarios[state.stageIndex]
+  const scenario = scenarios[state.stageIndex]
   if (!scenario) return null
-  const isLast = state.stageIndex >= theme.scenarios.length - 1
+  const isLast = state.stageIndex >= scenarios.length - 1
 
   return (
     <div className="min-h-dvh">

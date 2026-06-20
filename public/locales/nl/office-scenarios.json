@@ -1,0 +1,259 @@
+{
+  "scenarios": {
+    "office-1": {
+      "title": "Proactief eigenaarschap",
+      "principle": "1 — Neem eigenaarschap",
+      "description": "Je leidt een operationeel project wanneer een plotselinge, onverwachte verstoring van de toeleveringsketen je kernmaterialen met twee weken vertraagt. Je klant is erg gevoelig voor deadlines, en je team raakt in paniek.",
+      "dialogues": [
+        {
+          "speaker": "Teamlid",
+          "type": "shout",
+          "text": "De materialen zijn met TWEE WEKEN vertraagd! Hoe gaan we de deadline halen?!"
+        },
+        {
+          "speaker": "Klant",
+          "type": "broadcast",
+          "text": "Onze lanceringsdatum kan niet verschuiven. We hebben nu meteen een oplossing nodig."
+        },
+        {
+          "speaker": "Projectleider",
+          "type": "thought",
+          "text": "Blijf kalm. Focus op wat nog steeds onder controle staat."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Je analyseert onmiddellijk alternatieve lokale leveranciers, ontwikkelt een aangepaste workflow van twee weken met assets die je al hebt, en presenteert dit back-upplan aan de klant samen met je bevindingen.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Je stelt de vertraging onmiddellijk aan je klant voor, stelt de feiten duidelijk uiteen en vraagt hen hoe ze de tijdlijn of het budget willen aanpassen.",
+          "points": 5,
+          "feedback": "Sub-optimaal: Hoewel eerlijk, geef je de verantwoordelijkheid voor probleemoplossing terug aan de klant. Echt eigenaarschap betekent actionable oplossingen presenteren naast het probleem."
+        },
+        {
+          "key": "C",
+          "text": "Je wacht de week af om te zien of de oorspronkelijke leverancier het verzenden kan versnellen, hopend dat het probleem zichzelf zonder moeilijk gesprek oplost.",
+          "points": 0,
+          "feedback": "Passief: Dit is een reactieve 'wacht-en-zie'-aanpak. Je geeft je initiatief over aan externe omstandigheden en verliest kostbare tijd."
+        },
+        {
+          "key": "D",
+          "text": "Je stuurt een woedende e-mail naar de leverancier waarin je hen de schuld geeft voor het schenden van de tijdlijn, en vertelt je team dat het projectfalen volledig buiten je handen ligt.",
+          "points": -5,
+          "feedback": "Ergste: Dit verschuift volledig naar externe schuldtoewijzing. Energie verspillen aan dingen die je niet kunt controleren, verlamd je team en vernietigt je professionele geloofwaardigheid."
+        }
+      ]
+    },
+    "office-2": {
+      "title": "Prioritering",
+      "principle": "2 — Prioriteer",
+      "description": "Het is dinsdag ochtend. Je primaire projectroadmap moet om 17:00 uur klaar zijn. Plotseling overstroomt je inbox zich met kleine meldingen, en een collega komt langs voor een toevallig, lang gesprek over aankomende feestplannen.",
+      "dialogues": [
+        {
+          "speaker": "Vriendelijke collega",
+          "type": "speech",
+          "text": "Hé! Heb je al gehoord over de feestplannen?"
+        },
+        {
+          "speaker": "Jij",
+          "type": "thought",
+          "text": "Roadmap eerst. Alles anders kan wachten."
+        },
+        {
+          "speaker": "Systeem",
+          "type": "broadcast",
+          "text": "12 nieuwe e-mails"
+        },
+        {
+          "speaker": "Systeem",
+          "type": "broadcast",
+          "text": "5 chatberichten"
+        },
+        {
+          "speaker": "Systeem",
+          "type": "broadcast",
+          "text": "Herinnering: dien uitgavenrapport in"
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Je schakelt meldingen uit, stelt je status in op 'Gericht werk', blokkeert de volgende vier uur voor de roadmap, en plant een kort middagmoment voor beheertaken en je collega.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Je beantwoordt eerst de inkomende meldingen om je bureau op te ruimen, chat 20 minuten met je collega, en haast je dan door de roadmap in een stressvolle rush na het middageten.",
+          "points": 5,
+          "feedback": "Sub-optimaal: Je laat korte-termijn lawaai je ochtend bepalen. Je prioriteert kleine, luide taken boven echt impactvolle, stille werk."
+        },
+        {
+          "key": "C",
+          "text": "Je probeert multitasking: de roadmap schrijven, meldingen beantwoorden terwijl ze binnenkomen, en tegelijkertijd het toevallige gesprek voeren.",
+          "points": 0,
+          "feedback": "Inefficiënt: Multitasking verdeelt focus. Het verlaagt de kwaliteit van je kritieke strategische output en verhoogt je stressniveaus drastisch."
+        },
+        {
+          "key": "D",
+          "text": "Je voelt je overweldigd, dus besteed je de ochtend aan het organiseren van je digitale archieven, het schoonmaken van je werkplek en het coderen van je e-mailfilters.",
+          "points": -5,
+          "feedback": "Ergste: Dit is productieve uitstelgedrag. Je gebruikt klein huishoudwerk om mentaal aan hoogprioriteitsverantwoordelijkheden te ontsnappen die diep nadenken vereisen."
+        }
+      ]
+    },
+    "office-3": {
+      "title": "Wederzijds voordeel",
+      "principle": "3 — Samenwerk",
+      "description": "Je onderhandelt een overeenkomst met een onafhankelijke contentproducent. Ze eisen een grote wijziging van de projectspecificaties die veel meer uren van je zullen vergen, maar ze kunnen hun budget niet verhogen.",
+      "dialogues": [
+        {
+          "speaker": "Contentproducent",
+          "type": "speech",
+          "text": "We hebben aanvullende leverables nodig, maar ons budget kan niet toenemen."
+        },
+        {
+          "speaker": "Jij",
+          "type": "thought",
+          "text": "Er moet een oplossing zijn die voor ons beiden werkt."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Je stelt voor: 'Ik wil deze extra waarde bieden. Laten we de levering met twee weken verlengen zodat ik het in mijn gaten kan passen, of houden de deadline aan en selecteer je een kleinere batch van prioritaire leverables.'",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Je gaat akkoord om al het extra werk gratis te doen om de relatie smooth te houden, maar voelt je stiekem uitgebuit en haast je door de kwaliteit van de eindproducten.",
+          "points": 5,
+          "feedback": "Sub-optimaal: Dit is een onevenwichtige dynamiek waarbij je je eigen duurzaamheid opoffert. Het kwekt wrok en schaadt uiteindelijk beide partijen op lange termijn."
+        },
+        {
+          "key": "C",
+          "text": "Je houdt standpunt, weigert parameters aan te passen, citeer je originele voorwaarden rigide, en zeg ze dat ze het kunnen nemen of laten.",
+          "points": 0,
+          "feedback": "Inflexibel: Je beschermt je grenzen maar vernietigt een waardevolle relatie in plaats van een creatieve, wederzijds voordelige oplossing te zoeken."
+        },
+        {
+          "key": "D",
+          "text": "Je schrijft een agressief bericht waarin je hun professionele grenzen bekritiseert, dreigt het contract te beëindigen, en vertraagt hun huidige bestanden opzettelijk.",
+          "points": -5,
+          "feedback": "Ergste: Volledig gedreven door ego, zorg je ervoor dat zowel je professionele reputatie als het gedeelde project volledig vernietigd zijn."
+        }
+      ]
+    },
+    "office-4": {
+      "title": "Actief luisteren",
+      "principle": "4 — Luister",
+      "description": "Een teamlid komt in je kantoor zichtbaar van streek, smijt hun notitieboekje op het bureau, en zucht: 'Ik kan niet tegen hoe desorganiseerd onze projectcommunicatie is. Ik voel me volledig losgekoppeld en niet ondersteund!'",
+      "dialogues": [
+        {
+          "speaker": "Vertroebeld teamlid",
+          "type": "shout",
+          "text": "Ik kan niet tegen hoe desorganiseerd onze communicatie is!"
+        },
+        {
+          "speaker": "Vertroebeld teamlid",
+          "type": "shout",
+          "text": "Ik voel me volledig losgekoppeld en niet ondersteund!"
+        },
+        {
+          "speaker": "Jij",
+          "type": "thought",
+          "text": "Los niet op. Luister eerst."
+        },
+        {
+          "speaker": "Jij",
+          "type": "speech",
+          "text": "Het klinkt alsof je je overweldigd voelt."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Je sluit je laptop, kijkt naar hen, en weerspiegelt hun gevoel: 'Het klinkt alsof je je ongelooflijk overweldigd en geïsoleerd voelt nu. Is dat wat er gebeurt?'",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Je luistert even, onderbreekt dan: 'Ik begrijp het. Exact hetzelfde gebeurde mij vorig jaar. Laat me je vertellen hoe ik mijn communicatieproblemen toen heb opgelost...'",
+          "points": 5,
+          "feedback": "Sub-optimaal: Dit is een autobiografisch antwoord. Je filtert hun unieke frustratie door je eigen verleden, verschuift de focus terug naar jezelf."
+        },
+        {
+          "key": "C",
+          "text": "Je biedt onmiddellijk een technische oplossing: 'Je moet je meldingsfilters aanpassen, een gedeeld dashboard maken, en een ochtendsyncsessie instellen.'",
+          "points": 0,
+          "feedback": "Voortijdig advies: Je biedt oplossingen voordat de persoon zich gehoord of gevalideerd voelt. Ze willen eerst begrip en veiligheid, geen college over mechanica."
+        },
+        {
+          "key": "D",
+          "text": "Je reageert defensief: 'We hebben allemaal zware werklasten. Ik behandelde vanochtend ook al een escalatie, maar je ziet me niet overstuur raken over onze tools.'",
+          "points": -5,
+          "feedback": "Ergste: Je ontkracht hun ervaring volledig, verandert de interactie in een competitie over wie het moeilijkst heeft, wat psychologische veiligheid vernietigt."
+        }
+      ]
+    },
+    "office-5": {
+      "title": "Herladen met doel",
+      "principle": "5 — Herladen",
+      "description": "Je bent vier weken achter elkaar overwerk doen om je voor te bereiden op een intense regelgevingsaudit. Je merkt dat je minder gegevens onthoudt, simpele fouten maakt, en fysieke uitputting ervaart.",
+      "dialogues": [
+        {
+          "speaker": "Jij",
+          "type": "thought",
+          "text": "Ik kan me niet meer concentreren."
+        },
+        {
+          "speaker": "Jij",
+          "type": "thought",
+          "text": "Waarom maak ik zoveel fouten?"
+        },
+        {
+          "speaker": "Systeem",
+          "type": "broadcast",
+          "text": "Auditvoorbereiding deadline morgen"
+        },
+        {
+          "speaker": "Jij",
+          "type": "whisper",
+          "text": "Je hebt rust nodig..."
+        },
+        {
+          "speaker": "Jij",
+          "type": "whisper",
+          "text": "Vertraag..."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Je ontwerpt een strict herstellingsplan: een vast slaapvenster, 30 minuten dagelijkse lichaamsbeweging, en één uur volledig losgekoppeld van technologie om je mentale basislijn op te laden.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Je verlaagt je werkuren licht om passief televisie te kijken, maar handhaaft slechte slaapgewoonten en vertrouwt op voedsel uit gemak.",
+          "points": 5,
+          "feedback": "Sub-optimaal: Dit is passieve afleiding, geen actief herstel. Het herstelt je fysieke, mentale, of cognitieve gezondheid niet volledig."
+        },
+        {
+          "key": "C",
+          "text": "Je besluit door de uitputting heen te dringen. Je verhoogt je cafeïnegebruik, koopt productiviteitstools, en stelt je vast om nog later in de nacht te studeren.",
+          "points": 0,
+          "feedback": "Burnout-spoor: Dit is harder werken in plaats van slimmer. Een boom met een stomp mes hakken resulteert alleen in totale fysieke uitputting."
+        },
+        {
+          "key": "D",
+          "text": "Je voelt je overweldigd, mist je volgende mijlpalen zonder waarschuwing, en besteedt het hele weekend aan het scrollen door sociale media terwijl je alle verantwoordelijkheden vermijdt.",
+          "points": -5,
+          "feedback": "Ergste: Je schommelt van extreem overwerk naar totale zelfverzaking, gooit langetermijndoelen weg vanwege een temporair gebrek aan energiebeheer."
+        }
+      ]
+    }
+  }
+}

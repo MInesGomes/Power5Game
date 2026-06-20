@@ -1,0 +1,259 @@
+{
+  "scenarios": {
+    "office-1": {
+      "title": "Proactive Ownership",
+      "principle": "1 — Own",
+      "description": "You are leading an operational project when a sudden, unpredictable supply chain disruption delays your core materials by two weeks. Your client is highly sensitive to deadlines, and your team is starting to panic.",
+      "dialogues": [
+        {
+          "speaker": "Team Member",
+          "type": "shout",
+          "text": "The materials are delayed by TWO WEEKS! How are we going to meet the deadline?!"
+        },
+        {
+          "speaker": "Client",
+          "type": "broadcast",
+          "text": "Our launch date cannot move. We need a solution immediately."
+        },
+        {
+          "speaker": "Project Manager",
+          "type": "thought",
+          "text": "Stay calm. Focus on what can still be controlled."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "You immediately analyze alternative local vendors, draft an adjusted two-week workflow using assets you already have, and present this backup plan to the client along with your findings.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "You flag the delay to your client immediately, stating the facts clearly and asking them how they would like to adjust the timeline or budget.",
+          "points": 5,
+          "feedback": "Sub-optimal: While honest, you are passing the burden of problem-solving back to the client. True ownership means presenting actionable solutions alongside the problem."
+        },
+        {
+          "key": "C",
+          "text": "You wait out the week to see if the original vendor can expedite shipping, hoping the problem resolves itself without a difficult conversation.",
+          "points": 0,
+          "feedback": "Passive: This is a reactive 'wait-and-see' approach. You surrender your initiative to external circumstances and lose valuable time."
+        },
+        {
+          "key": "D",
+          "text": "You send an angry email to the vendor blaming them for breaching the timeline, and tell your team the project failure is entirely out of your hands.",
+          "points": -5,
+          "feedback": "Worst: This shifts entirely into external blame. Venting energy on things you cannot control paralyzes your team and destroys your professional credibility."
+        }
+      ]
+    },
+    "office-2": {
+      "title": "Prioritization",
+      "principle": "2 — Prioritize",
+      "description": "It is Tuesday morning. Your primary project roadmap is due by 5:00 PM. Suddenly your inbox floods with minor notifications, and a colleague stops by for a casual, lengthy chat about an upcoming holiday party.",
+      "dialogues": [
+        {
+          "speaker": "Friendly Colleague",
+          "type": "speech",
+          "text": "Hey! Have you heard about the holiday party plans?"
+        },
+        {
+          "speaker": "You",
+          "type": "thought",
+          "text": "Roadmap first. Everything else can wait."
+        },
+        {
+          "speaker": "System",
+          "type": "broadcast",
+          "text": "12 New Emails"
+        },
+        {
+          "speaker": "System",
+          "type": "broadcast",
+          "text": "5 Chat Messages"
+        },
+        {
+          "speaker": "System",
+          "type": "broadcast",
+          "text": "Reminder: Submit Expense Report"
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "You pause notifications, set your status to 'Focused Work', block the next four hours for the roadmap, and schedule a brief afternoon slot for admin tasks and your colleague.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "You answer the incoming notifications first to clear your desk, chat with your colleague for 20 minutes, then rush through the roadmap in a high-stress scramble after lunch.",
+          "points": 5,
+          "feedback": "Sub-optimal: You are letting short-term noise dictate your morning. You prioritize small, loud tasks over the truly impactful, quiet work."
+        },
+        {
+          "key": "C",
+          "text": "You try to multi-task: writing the roadmap, replying to notifications as they pop up, and carrying on the casual conversation simultaneously.",
+          "points": 0,
+          "feedback": "Inefficient: Multi-tasking divides focus. It lowers the quality of your critical strategic output and drastically increases your stress levels."
+        },
+        {
+          "key": "D",
+          "text": "You feel overwhelmed, so you spend the morning organizing your digital archives, cleaning your workspace, and color-coding your email filters.",
+          "points": -5,
+          "feedback": "Worst: This is productive procrastination. You use minor busywork to mentally escape high-priority responsibilities that require deep thought."
+        }
+      ]
+    },
+    "office-3": {
+      "title": "Mutual Benefit",
+      "principle": "3 — Collaborate",
+      "description": "You are negotiating an agreement with an independent content producer. They demand a major change to the project specifications that will require significantly more hours from you, but they cannot increase their budget.",
+      "dialogues": [
+        {
+          "speaker": "Content Producer",
+          "type": "speech",
+          "text": "We need additional deliverables, but our budget cannot increase."
+        },
+        {
+          "speaker": "You",
+          "type": "thought",
+          "text": "There must be a solution that works for both of us."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "You propose: 'I want to provide this extra value. Let's extend delivery by two weeks so I can fit it into my gaps, or keep the deadline and select a smaller batch of priority deliverables.'",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "You agree to do all the extra work for free to keep the relationship smooth, but secretly feel exploited and rush the quality of the final assets.",
+          "points": 5,
+          "feedback": "Sub-optimal: This is an imbalanced dynamic where you sacrifice your own sustainability. It breeds resentment and ultimately hurts both parties long-term."
+        },
+        {
+          "key": "C",
+          "text": "You stand your ground, refuse to adjust any parameters, quote your original terms rigidly, and tell them to take it or leave it.",
+          "points": 0,
+          "feedback": "Inflexible: You protect your boundaries but destroy a valuable relationship instead of seeking a creative, mutually beneficial alternative."
+        },
+        {
+          "key": "D",
+          "text": "You write an aggressive message criticizing their professional boundaries, threaten to terminate the contract, and intentionally delay their current files.",
+          "points": -5,
+          "feedback": "Worst: Driven entirely by ego, you ensure both your professional reputation and the shared project are completely ruined."
+        }
+      ]
+    },
+    "office-4": {
+      "title": "Active Listening",
+      "principle": "4 — Listen",
+      "description": "A team member comes into your office visibly distressed, drops their notebook on the desk, and sighs: 'I cannot stand how disorganized our project communication is. I feel completely disconnected and unsupported!'",
+      "dialogues": [
+        {
+          "speaker": "Distressed Team Member",
+          "type": "shout",
+          "text": "I cannot stand how disorganized our communication is!"
+        },
+        {
+          "speaker": "Distressed Team Member",
+          "type": "shout",
+          "text": "I feel completely disconnected and unsupported!"
+        },
+        {
+          "speaker": "You",
+          "type": "thought",
+          "text": "Don't solve. Listen first."
+        },
+        {
+          "speaker": "You",
+          "type": "speech",
+          "text": "It sounds like you're feeling overwhelmed."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "You close your laptop, look at them, and mirror their sentiment: 'It sounds like you feel incredibly overwhelmed and isolated right now. Is that what's happening?'",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "You listen briefly, then interject: 'I understand. The exact same thing happened to me last year. Let me tell you how I solved my communication issues back then...'",
+          "points": 5,
+          "feedback": "Sub-optimal: This is an autobiographical response. You filter their unique frustration through your own past, shifting the focus back to yourself."
+        },
+        {
+          "key": "C",
+          "text": "You immediately offer a technical fix: 'You need to adjust your notification filters, create a shared dashboard, and set up a morning sync meeting.'",
+          "points": 0,
+          "feedback": "Premature Advice: You offer solutions before the person feels heard or validated. They want understanding and safety first, not a lecture on mechanics."
+        },
+        {
+          "key": "D",
+          "text": "You get defensive: 'We all have heavy workloads. I dealt with an escalation this morning too, but you don't see me getting upset about our tools.'",
+          "points": -5,
+          "feedback": "Worst: You completely invalidate their experience, turning the interaction into a competition about who has it harder, which destroys psychological safety."
+        }
+      ]
+    },
+    "office-5": {
+      "title": "Recharge with purpose",
+      "principle": "5 — Recharge",
+      "description": "You have spent four consecutive weeks working overtime to prepare for an intense regulatory audit. You notice you are retaining less data, making simple errors, and experiencing physical exhaustion.",
+      "dialogues": [
+        {
+          "speaker": "You",
+          "type": "thought",
+          "text": "I can't focus anymore."
+        },
+        {
+          "speaker": "You",
+          "type": "thought",
+          "text": "Why am I making so many mistakes?"
+        },
+        {
+          "speaker": "System",
+          "type": "broadcast",
+          "text": "Audit Preparation Deadline Tomorrow"
+        },
+        {
+          "speaker": "You",
+          "type": "whisper",
+          "text": "You need rest..."
+        },
+        {
+          "speaker": "You",
+          "type": "whisper",
+          "text": "Slow down..."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "You design a strict renewal plan: a firm sleep window, 30 minutes of daily physical movement, and one hour completely disconnected from tech to recharge your mental baseline.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "You reduce your working hours slightly to watch television passively, but maintain poor sleeping habits and rely on convenience foods.",
+          "points": 5,
+          "feedback": "Sub-optimal: This is passive distraction, not active recovery. It doesn't holistically restore your physical, mental, or cognitive health."
+        },
+        {
+          "key": "C",
+          "text": "You decide to push through the exhaustion. You increase your caffeine intake, buy productivity tools, and commit to studying even later into the night.",
+          "points": 0,
+          "feedback": "Burnout Track: This is working harder instead of smarter. Cutting a tree with a blunt blade only results in total physical exhaustion."
+        },
+        {
+          "key": "D",
+          "text": "You feel overwhelmed, miss your next milestones without notice, and spend the entire weekend scrolling social media while avoiding all responsibilities.",
+          "points": -5,
+          "feedback": "Worst: You swing from extreme overexertion to absolute self-abandonment, discarding long-term objectives due to a temporary lack of energy management."
+        }
+      ]
+    }
+  }
+}

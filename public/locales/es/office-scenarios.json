@@ -1,0 +1,259 @@
+{
+  "scenarios": {
+    "office-1": {
+      "title": "Propiedad Proactiva",
+      "principle": "1 — Sé dueño",
+      "description": "Estás liderando un proyecto operativo cuando una disrupción repentina e impredecible en la cadena de suministro retrasa tus materiales principales dos semanas. Tu cliente es muy sensible a los plazos, y tu equipo está comenzando a entrar en pánico.",
+      "dialogues": [
+        {
+          "speaker": "Miembro del equipo",
+          "type": "shout",
+          "text": "¡Los materiales se retrasan DOS SEMANAS! ¿Cómo vamos a cumplir el plazo?"
+        },
+        {
+          "speaker": "Cliente",
+          "type": "broadcast",
+          "text": "Nuestra fecha de lanzamiento no puede cambiar. Necesitamos una solución de inmediato."
+        },
+        {
+          "speaker": "Gerente de proyecto",
+          "type": "thought",
+          "text": "Mantente tranquilo. Enfócate en lo que aún está bajo control."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Inmediatamente analizas proveedores locales alternativos, redactas un flujo de trabajo ajustado de dos semanas utilizando activos que ya tienes, y presentas este plan de respaldo al cliente junto con tus hallazgos.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Informas del retraso a tu cliente inmediatamente, exponiendo los hechos claramente y preguntándoles cómo les gustaría ajustar el cronograma o presupuesto.",
+          "points": 5,
+          "feedback": "Subóptimo: Aunque honesto, estás transfiriendo la carga de la resolución de problemas al cliente. La verdadera propiedad significa presentar soluciones accionables junto con el problema."
+        },
+        {
+          "key": "C",
+          "text": "Esperas la semana para ver si el proveedor original puede acelerar el envío, esperando que el problema se resuelva por sí solo sin una conversación difícil.",
+          "points": 0,
+          "feedback": "Pasivo: Este es un enfoque reactivo de 'esperar y ver'. Entregas tu iniciativa a circunstancias externas y pierdes tiempo valioso."
+        },
+        {
+          "key": "D",
+          "text": "Envías un correo enojado al proveedor culpándolo por incumplir el cronograma, y le dices a tu equipo que el fracaso del proyecto está completamente fuera de tus manos.",
+          "points": -5,
+          "feedback": "Peor: Esto cambia completamente a culpa externa. Gastar energía en cosas que no puedes controlar paraliza tu equipo y destruye tu credibilidad profesional."
+        }
+      ]
+    },
+    "office-2": {
+      "title": "Priorización",
+      "principle": "2 — Prioriza",
+      "description": "Es martes por la mañana. Tu mapa de ruta principal del proyecto vence a las 17:00. De repente tu bandeja de entrada se inunda de notificaciones menores, y un colega se acerca para una charla casual y larga sobre planes de fiestas próximas.",
+      "dialogues": [
+        {
+          "speaker": "Colega amistoso",
+          "type": "speech",
+          "text": "¡Oye! ¿Ya escuchaste sobre los planes de la fiesta?"
+        },
+        {
+          "speaker": "Tú",
+          "type": "thought",
+          "text": "Primero el mapa de ruta. Todo lo demás puede esperar."
+        },
+        {
+          "speaker": "Sistema",
+          "type": "broadcast",
+          "text": "12 correos nuevos"
+        },
+        {
+          "speaker": "Sistema",
+          "type": "broadcast",
+          "text": "5 mensajes de chat"
+        },
+        {
+          "speaker": "Sistema",
+          "type": "broadcast",
+          "text": "Recordatorio: Enviar informe de gastos"
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Pausas las notificaciones, configuras tu estado a 'Trabajo enfocado', bloqueas las próximas cuatro horas para el mapa de ruta, y programas un breve espacio por la tarde para tareas administrativas y tu colega.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Respondes primero a las notificaciones entrantes para limpiar tu escritorio, charlas con tu colega durante 20 minutos, luego te apresuras a través del mapa de ruta en una prisa de alto estrés después del almuerzo.",
+          "points": 5,
+          "feedback": "Subóptimo: Dejas que el ruido a corto plazo dicte tu mañana. Priorizas tareas pequeñas y ruidosas sobre el trabajo verdaderamente impactante y silencioso."
+        },
+        {
+          "key": "C",
+          "text": "Intentas multitarea: escribir el mapa de ruta, responder notificaciones mientras aparecen, y mantener la conversación casual simultáneamente.",
+          "points": 0,
+          "feedback": "Ineficiente: La multitarea divide el enfoque. Disminuye la calidad de tu producto estratégico crítico y aumenta dramáticamente tus niveles de estrés."
+        },
+        {
+          "key": "D",
+          "text": "Te sientes abrumado, así que pasas la mañana organizando tus archivos digitales, limpiando tu espacio de trabajo, y codificando por colores tus filtros de correo.",
+          "points": -5,
+          "feedback": "Peor: Esta es una postergación productiva. Usas pequeñas tareas para escapar mentalmente de responsabilidades de alto nivel que requieren pensamiento profundo."
+        }
+      ]
+    },
+    "office-3": {
+      "title": "Beneficio Mutuo",
+      "principle": "3 — Colabora",
+      "description": "Estás negociando un acuerdo con un productor de contenido independiente. Exigen un cambio importante en las especificaciones del proyecto que requerirá significativamente más horas de ti, pero no pueden aumentar su presupuesto.",
+      "dialogues": [
+        {
+          "speaker": "Productor de contenido",
+          "type": "speech",
+          "text": "Necesitamos entregas adicionales, pero nuestro presupuesto no puede aumentar."
+        },
+        {
+          "speaker": "Tú",
+          "type": "thought",
+          "text": "Debe haber una solución que funcione para ambos."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Propones: 'Quiero proporcionar este valor extra. Extendamos la entrega dos semanas para que pueda ajustarlo en mis espacios, o mantengamos el plazo y seleccionemos un lote más pequeño de entregas prioritarias.'",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Aceptas hacer todo el trabajo extra gratis para mantener la relación suave, pero secretamente te sientes explotado y apresurado con la calidad de los activos finales.",
+          "points": 5,
+          "feedback": "Subóptimo: Esta es una dinámica desequilibrada donde sacrificas tu propia sostenibilidad. Genera resentimiento e inevitablemente daña ambas partes a largo plazo."
+        },
+        {
+          "key": "C",
+          "text": "Mantienes tu posición, rehúsas ajustar cualquier parámetro, citas rígidamente tus términos originales, y les dices que lo acepten o lo dejen.",
+          "points": 0,
+          "feedback": "Inflexible: Proteges tus límites pero destruyes una relación valiosa en lugar de buscar una alternativa creativa y mutuamente benéfica."
+        },
+        {
+          "key": "D",
+          "text": "Escribes un mensaje agresivo criticando sus límites profesionales, amenazas con terminar el contrato, e intencionalmente retrasos sus archivos actuales.",
+          "points": -5,
+          "feedback": "Peor: Impulsado completamente por el ego, aseguras que tanto tu reputación profesional como el proyecto compartido estén completamente arruinados."
+        }
+      ]
+    },
+    "office-4": {
+      "title": "Escucha Activa",
+      "principle": "4 — Escucha",
+      "description": "Un miembro del equipo entra a tu oficina visiblemente angustiado, deja caer su cuaderno en el escritorio, y suspira: '¡No puedo soportar lo desorganizada que está nuestra comunicación de proyecto! ¡Me siento completamente desconectado y sin apoyo!'",
+      "dialogues": [
+        {
+          "speaker": "Miembro del equipo angustiado",
+          "type": "shout",
+          "text": "¡No puedo soportar lo desorganizada que está nuestra comunicación!"
+        },
+        {
+          "speaker": "Miembro del equipo angustiado",
+          "type": "shout",
+          "text": "¡Me siento completamente desconectado y sin apoyo!"
+        },
+        {
+          "speaker": "Tú",
+          "type": "thought",
+          "text": "No resuelvas. Escucha primero."
+        },
+        {
+          "speaker": "Tú",
+          "type": "speech",
+          "text": "Parece que te sientes abrumado."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Cierras tu laptop, los miras, y reflejas su sentimiento: '¿Parece que te sientes increíblemente abrumado e aislado ahora. ¿Es eso lo que está pasando?'",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Escuchas brevemente, luego interrumpes: 'Entiendo. Exactamente lo mismo me pasó el año pasado. Déjame contarte cómo resolví mis problemas de comunicación entonces...'",
+          "points": 5,
+          "feedback": "Subóptimo: Esta es una respuesta autobiográfica. Filtras su frustración única a través de tu propio pasado, cambiando el enfoque nuevamente hacia ti."
+        },
+        {
+          "key": "C",
+          "text": "Inmediatamente ofreces una solución técnica: 'Necesitas ajustar tus filtros de notificación, crear un panel compartido, y configurar una reunión de sincronización matutina.'",
+          "points": 0,
+          "feedback": "Consejo prematuro: Ofreces soluciones antes de que la persona se sienta escuchada o validada. Quieren comprensión y seguridad primero, no una conferencia sobre mecánica."
+        },
+        {
+          "key": "D",
+          "text": "Te pones defensivo: 'Todos tenemos cargas de trabajo pesadas. Yo también lidié con una escalada esta mañana, pero no me ves alterándome por nuestras herramientas.'",
+          "points": -5,
+          "feedback": "Peor: Completamente invalidas su experiencia, convirtiendo la interacción en una competencia sobre quién lo tiene más difícil, lo que destruye la seguridad psicológica."
+        }
+      ]
+    },
+    "office-5": {
+      "title": "Recargarse con propósito",
+      "principle": "5 — Recarga",
+      "description": "Has pasado cuatro semanas consecutivas trabajando horas extra para prepararte para una auditoría regulatoria intensa. Notas que retienes menos datos, cometes errores simples, y experimentas agotamiento físico.",
+      "dialogues": [
+        {
+          "speaker": "Tú",
+          "type": "thought",
+          "text": "Ya no puedo concentrarme."
+        },
+        {
+          "speaker": "Tú",
+          "type": "thought",
+          "text": "¿Por qué estoy cometiendo tantos errores?"
+        },
+        {
+          "speaker": "Sistema",
+          "type": "broadcast",
+          "text": "Plazo de preparación de auditoría mañana"
+        },
+        {
+          "speaker": "Tú",
+          "type": "whisper",
+          "text": "Necesitas descansar..."
+        },
+        {
+          "speaker": "Tú",
+          "type": "whisper",
+          "text": "Desacelera..."
+        }
+      ],
+      "choices": [
+        {
+          "key": "A",
+          "text": "Diseñas un plan de renovación estricto: una ventana de sueño firme, 30 minutos de movimiento físico diario, y una hora completamente desconectada de la tecnología para recargar tu línea base mental.",
+          "points": 10
+        },
+        {
+          "key": "B",
+          "text": "Reduces tus horas de trabajo ligeramente para ver televisión pasivamente, pero mantienes malos hábitos de sueño y confías en alimentos de conveniencia.",
+          "points": 5,
+          "feedback": "Subóptimo: Esta es una distracción pasiva, no una recuperación activa. No restaura holísticamente tu salud física, mental o cognitiva."
+        },
+        {
+          "key": "C",
+          "text": "Decides seguir adelante con el agotamiento. Aumentas tu ingesta de cafeína, compras herramientas de productividad, y te comprometes a estudiar aún más tarde en la noche.",
+          "points": 0,
+          "feedback": "Pista de agotamiento: Esto es trabajar más duro en lugar de más inteligente. Cortar un árbol con una hoja desafilada solo resulta en agotamiento físico total."
+        },
+        {
+          "key": "D",
+          "text": "Te sientes abrumado, pierdes tus próximos hitos sin aviso, y pasas todo el fin de semana desplazándose por redes sociales mientras evitas todas las responsabilidades.",
+          "points": -5,
+          "feedback": "Peor: Oscila de sobresfuerzo extremo a autoabandono completo, descartando objetivos a largo plazo debido a una falta temporal de gestión de energía."
+        }
+      ]
+    }
+  }
+}

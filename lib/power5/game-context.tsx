@@ -9,6 +9,7 @@ import {
 } from "react"
 import type { ChoiceKey } from "./types"
 import { getTheme } from "./themes"
+import { getScenariosForThemeAndLanguage } from "./scenarios-i18n"
 import i18n from 'i18next'
 
 export interface GameState {
@@ -57,8 +58,12 @@ const initialState: GameState = {
 function computeBadges(state: GameState): string[] {
   const theme = getTheme(state.themeId)
   if (!theme) return []
+  
+  // Get translated scenarios based on theme and language
+  const scenarios = getScenariosForThemeAndLanguage(state.themeId, state.language)
+  
   const earned: string[] = []
-  for (const scenario of theme.scenarios) {
+  for (const scenario of scenarios) {
     const picked = state.choices[scenario.id]
     if (!picked) continue
     const choice = scenario.choices.find((c) => c.key === picked)
@@ -66,7 +71,7 @@ function computeBadges(state: GameState): string[] {
       earned.push(scenario.principle.split("—")[1]?.trim() ?? scenario.title)
     }
   }
-  const total = theme.scenarios.reduce((sum, s) => {
+  const total = scenarios.reduce((sum, s) => {
     const picked = state.choices[s.id]
     const c = s.choices.find((ch) => ch.key === picked)
     return sum + (c?.points ?? 0)
@@ -101,8 +106,8 @@ function reducer(state: GameState, action: Action): GameState {
       }
     }
     case "NEXT_STAGE": {
-      const theme = getTheme(state.themeId)
-      const last = (theme?.scenarios.length ?? 5) - 1
+      const scenarios = getScenariosForThemeAndLanguage(state.themeId, state.language)
+      const last = (scenarios.length ?? 5) - 1
       if (state.stageIndex >= last) {
         return { ...state, showFinal: true, badges: computeBadges(state) }
       }
