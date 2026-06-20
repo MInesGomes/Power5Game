@@ -1,0 +1,362 @@
+[
+  {
+    "id": "home-1",
+    "level": 1,
+    "title": "Recuperação Emocional",
+    "principle": "1 — Dono",
+    "description": "Depois de um dia cansativo no trabalho, o Marido retorna para casa visualmente exausto e completamente em silêncio. A Esposa nota a tensão e imediatamente começa a fazer perguntas para ajudar, mas ele se afasta, querendo ficar sozinho em silêncio.",
+    "sceneMetadata": {
+      "environment": "Aconchegante sala de estar ao pôr do sol. Maleta perto da entrada. Iluminação ambiente quente. Atmosfera tranquila.",
+      "cameraAngle": "Perspectiva 3D lateral leve focada na entrada e na área do sofá.",
+      "characters": [
+        {
+          "id": "husband",
+          "name": "Marido",
+          "position": "left",
+          "emotion": "Exausto, drenado",
+          "animation": "slump",
+          "tone": "slate"
+        },
+        {
+          "id": "wife",
+          "name": "Esposa",
+          "position": "center",
+          "emotion": "Preocupada e atenciosa",
+          "animation": "idle",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Oi, você está bem?", "Algo aconteceu no trabalho?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "whisper",
+          "lines": ["Eu só preciso de um pouco de silêncio...", "Por favor, não agora."]
+        },
+        {
+          "speakerId": "husband",
+          "type": "thought",
+          "lines": ["Meu cérebro está completamente sobrecarregado.", "Preciso de tempo para recuperar primeiro."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Esposa diz: 'Vejo que teve um dia difícil. Estou aqui se você quiser conversar, mas vou te dar espaço agora', enquanto o Marido promete se conectar depois de uma hora de silêncio."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Esposa para de fazer perguntas mas se sente ferida e rejeitada, assumindo que o silêncio significa que o relacionamento está em apuros, enquanto o Marido fica isolado a noite toda.",
+        "feedback": "Subótimo: Você evitou uma briga, mas a falta de compreensão cria ansiedade desnecessária. Um precisa de tempo de processamento solo, enquanto o outro precisa de reasseguração."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Esposa segue o Marido pela casa, exigindo que ele se abra e fale sobre seus sentimentos, fazendo o Marido ficar completamente irresponsivo.",
+        "feedback": "Passivo: Forçar expressão verbal em alguém que precisa de processamento interno o faz se retrair mais profundamente no isolamento."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Esposa grita que o Marido é egoísta e emocionalmente frio, levando o Marido a sair correndo da casa completamente.",
+        "feedback": "Pior: Interpretar mal uma necessidade de recuperação em silêncio como um ataque pessoal dispara um ciclo severo de perseguição e retirada."
+      }
+    ]
+  },
+  {
+    "id": "home-2",
+    "level": 2,
+    "title": "A Arte de Escutar",
+    "principle": "2 — Priorize",
+    "description": "A Esposa chega em casa estressada com um conflito difícil com um colega de trabalho. Conforme ela explica a situação injusta, o Marido imediatamente a interrompe com uma estratégia lógica passo a passo para resolver o problema do trabalho.",
+    "sceneMetadata": {
+      "environment": "Mesa de cozinha durante o jantar à noite. Xícaras de café na mesa. Chuva visível pela janela.",
+      "cameraAngle": "Perspectiva conversacional face a face.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Esposa",
+          "position": "left",
+          "emotion": "Frustrada e ferida",
+          "animation": "fidget",
+          "tone": "rose"
+        },
+        {
+          "id": "husband",
+          "name": "Marido",
+          "position": "right",
+          "emotion": "Orientado para soluções",
+          "animation": "lean",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Meu colega se apropriou do meu trabalho novamente.", "Ninguém sequer ouviu meu lado."]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Aqui está o que você deveria fazer...", "Primeiro, documente tudo."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Eu não preciso de uma solução agora.", "Eu só quero que alguém entenda."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Marido para de oferecer conselhos, abraça a Esposa e diz: 'Isso soa extremamente frustrante, me conte mais', validando os sentimentos primeiro."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Marido ouve em silêncio mas parece inquieto, esperando a Esposa terminar de falar para que ele possa sugerir um ajuste rápido e prático.",
+        "feedback": "Subótimo: Você ofereceu presença física, mas sua impaciência mental mostra que você valoriza consertar problemas sobre se conectar emocionalmente."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Marido diz: 'Você está exagerando, apenas ignore o colega e faça seu trabalho', desconsiderando completamente o sofrimento emocional.",
+        "feedback": "Passivo: Minimizar a experiência emocional de alguém a faz se sentir invalidada, isolada e incompreendida em seu próprio lar."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Marido culpa a Esposa pelo conflito, explicando exatamente o que ela fez errado para causar a situação.",
+        "feedback": "Pior: Oferecer crítica não solicitada quando seu parceiro busca empatia muda seu papel de aliado de apoio para adversário."
+      }
+    ]
+  },
+  {
+    "id": "home-3",
+    "level": 3,
+    "title": "Independência Saudável",
+    "principle": "3 — Colabore",
+    "description": "O relacionamento tem sido maravilhoso, mas de repente o Marido fica distante e precisa de distância emocional. A Esposa imediatamente sente uma queda na autoestima, entra em pânico e tenta forçar intimidade profunda.",
+    "sceneMetadata": {
+      "environment": "Casa moderna. Marido lendo quietamente na varanda enquanto Esposa permanece dentro parecendo preocupada.",
+      "cameraAngle": "Cena dividida ampla mostrando distância emocional entre ambos os personagens.",
+      "characters": [
+        {
+          "id": "husband",
+          "name": "Marido",
+          "position": "right",
+          "emotion": "Reflexivo",
+          "animation": "idle",
+          "tone": "slate"
+        },
+        {
+          "id": "wife",
+          "name": "Esposa",
+          "position": "left",
+          "emotion": "Ansiosa",
+          "animation": "fidget",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Eu fiz algo errado?", "Por que você está se afastando?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "whisper",
+          "lines": ["Eu só preciso de espaço.", "Não é sobre você."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["E se eles não me amarem mais?"]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Esposa mantém seus próprios hobbies e amigos, permitindo que o Marido tenha espaço para se afastar e naturalmente voltar com afeto renovado."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Esposa pede reasseguração uma vez, depois fica ansiosamente esperando ao redor da casa para o Marido voltar ao comportamento normal.",
+        "feedback": "Subótimo: Você deu espaço físico, mas o pânico interno o impede de viver sua vida independentemente durante o ciclo natural de seu parceiro."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Esposa pune a distância agindo fria e distante em retorno, criando uma parede de ressentimento silencioso entre ambas as pessoas.",
+        "feedback": "Passivo: Retirada emocional de olho por olho cria distância artificial, bloqueando o impulso natural de se aproximar novamente."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Esposa exige saber por que o amor mudou, acusa o Marido de traição e rastreia cada movimento dele.",
+        "feedback": "Pior: Perseguir alguém que precisa de distância temporária o afasta permanentemente e destrói a confiança fundamental do relacionamento."
+      }
+    ]
+  },
+  {
+    "id": "home-4",
+    "level": 4,
+    "title": "Entendendo Estilos de Comunicação",
+    "principle": "4 — Escute",
+    "description": "Planejando uma reforma em casa, a Esposa exclama: 'Nunca terminamos nada no prazo, e nossa casa é uma zona de desastre total!' O Marido toma isso literalmente, fica altamente defensivo e apresenta recibos de conclusão passada.",
+    "sceneMetadata": {
+      "environment": "Área de reforma em casa. Latas de tinta, ferramentas, prateleiras inacabadas e planos de reforma espalhados por uma mesa.",
+      "cameraAngle": "Perspectiva ligeiramente elevada focando em ambos os parceiros e a bagunça da reforma.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Esposa",
+          "position": "center",
+          "emotion": "Sobrecarregada",
+          "animation": "fidget",
+          "tone": "rose"
+        },
+        {
+          "id": "husband",
+          "name": "Marido",
+          "position": "right",
+          "emotion": "Defensivo",
+          "animation": "lean",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "shout",
+          "lines": ["Nunca terminamos nada no prazo!", "Esta casa é uma zona de desastre!"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Isso não é verdade.", "Veja esses recibos."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Não quero dizer literalmente.", "Estou apenas sobrecarregada."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Marido percebe que esta é uma expressão dramática da sobrecarga atual, ignora as palavras literais e diz: 'Sei que se sente caótico agora, vamos tirar uma pausa.'"
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Marido fica em silêncio mas registra o comentário como uma acusação injusta, se sentindo profundamente desapreciado pelo trabalho duro que fez.",
+        "feedback": "Subótimo: Você evitou uma discussão, mas tomar hipérbole emocional literalmente gera ressentimento interno e raiva silenciosa."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Marido corrige os fatos imediatamente, dizendo: 'Isso é uma mentira, terminamos a cozinha exatamente no prazo no ano passado.'",
+        "feedback": "Passivo: Debater fatos literais durante uma sessão de desabafo emocional faz seu parceiro se sentir dispensado e completamente incompreendido."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Marido responde com raiva: 'Se a casa é um desastre, é porque você desperdiça dinheiro e não consegue gerenciar seu tempo adequadamente!'",
+        "feedback": "Pior: Transformar uma expressão de estresse emocional em um argumento de placar pessoal escala uma simples reclamação em uma guerra total."
+      }
+    ]
+  },
+  {
+    "id": "home-5",
+    "level": 5,
+    "title": "Pedidos Claros e Cooperação",
+    "principle": "5 — Recarregue",
+    "description": "A Esposa se sente completamente sobrecarregada gerenciando as tarefas domésticas sozinha. Em vez de pedir ajuda diretamente, ela deixa dicas sutis, suspira alto enquanto limpa e espera que o Marido apenas note e ajude.",
+    "sceneMetadata": {
+      "environment": "Cozinha ocupada. Pratos sujos na pia. Cesto de roupa próximo. Preparação de refeição à noite em andamento.",
+      "cameraAngle": "Perspectiva média mostrando ambos os personagens no mesmo cômodo mas mentalmente desconectados.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Esposa",
+          "position": "left",
+          "emotion": "Frustrada e exausta",
+          "animation": "fidget",
+          "isPlayer": true,
+          "tone": "primary"
+        },
+        {
+          "id": "husband",
+          "name": "Marido",
+          "position": "right",
+          "emotion": "Relaxado e desavisado",
+          "animation": "idle",
+          "tone": "slate"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "whisper",
+          "lines": ["suspira", "Deve ser legal não ter nada para fazer..."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Por que eles não notam?", "Por que sempre tenho que fazer tudo?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Tudo bem?", "Você parece chateada."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Esposa se aproxima do Marido diretamente e diz: 'Você poderia, por favor, tirar o lixo e limpar os balcões da cozinha antes do jantar?'"
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Esposa pergunta: 'Você poderia ajudar por aqui às vezes?' deixando o pedido vago, confuso e completamente aberto à interpretação.",
+        "feedback": "Subótimo: Você falou, mas pedidos vagos convidam resultados vagos. Convites claros, breves e diretos funcionam melhor."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Esposa continua fazendo todo o trabalho em silêncio, ficando cada vez mais furiosa a cada minuto, esperando que o Marido magicamente se voluntarie.",
+        "feedback": "Passivo: Esperar que um parceiro leia seus pensamentos leva diretamente à amargura. As pessoas não conseguem consertar problemas que não sabem que existem."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Esposa bate um prato sujo e grita: 'Você é incrivelmente preguiçoso! Você apenas se senta enquanto eu faço absolutamente tudo!'",
+        "feedback": "Pior: Explodir após manter ressentimento silencioso choca seu parceiro e transforma uma necessidade não dita em um confronto doloroso e defensivo."
+      }
+    ]
+  }
+]

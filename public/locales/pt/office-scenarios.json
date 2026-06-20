@@ -1,9 +1,9 @@
 {
   "scenarios": {
     "office-1": {
-      "title": "Propriedade Proativa",
+      "title": "Liderança Responsável",
       "principle": "1 — Assuma Responsabilidade",
-      "description": "Você está liderando um projeto operacional quando uma interrupção repentina e inesperada na cadeia de suprimentos atrasa seus materiais principais em duas semanas. Seu cliente é muito sensível a prazos, e sua equipe está começando a entrar em pânico.",
+      "description": "Está a liderar um projeto operacional quando uma interrupção repentina e inesperada na cadeia de suprimentos atrasa seus materiais principais por duas semanas. O seu cliente é muito sensível a prazos, e a sua equipe está a começar a entrar em pânico.",
       "dialogues": [
         {
           "speaker": "Membro da equipe",

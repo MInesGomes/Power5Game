@@ -1,0 +1,362 @@
+[
+  {
+    "id": "home-1",
+    "level": 1,
+    "title": "Emotional Recovery",
+    "principle": "1 — Own",
+    "description": "After a grueling day at work, the Husband returns home visibly exhausted and completely silent. The Wife notices the tension and immediately starts asking questions to help, but he pulls away, wanting to be left alone in silence.",
+    "sceneMetadata": {
+      "environment": "Cozy living room at sunset. Briefcase near the entrance. Warm ambient lighting. Quiet atmosphere.",
+      "cameraAngle": "Slight 3D side perspective focused on the entryway and sofa area.",
+      "characters": [
+        {
+          "id": "husband",
+          "name": "Husband",
+          "position": "left",
+          "emotion": "Exhausted, drained",
+          "animation": "slump",
+          "tone": "slate"
+        },
+        {
+          "id": "wife",
+          "name": "Wife",
+          "position": "center",
+          "emotion": "Concerned and caring",
+          "animation": "idle",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Hey, are you okay?", "Something happened at work?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "whisper",
+          "lines": ["I just need some quiet...", "Please, not right now."]
+        },
+        {
+          "speakerId": "husband",
+          "type": "thought",
+          "lines": ["My brain is completely overloaded.", "I need time to recover first."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Wife says, 'I see you had a rough day. I'm here if you want to talk, but I'll give you some space now,' while Husband promises to connect after an hour of quiet time."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Wife stops asking questions but feels hurt and rejected, assuming the silence means the relationship is in trouble, while Husband stays isolated all night.",
+        "feedback": "Sub-optimal: You avoided a fight, but lack of understanding creates unnecessary anxiety. One needs solo processing time, while the other needs reassurance."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Wife follows Husband around the house, demanding they open up and talk about their feelings, causing Husband to become entirely unresponsive.",
+        "feedback": "Passive: Forcing verbal expression on someone who needs internal processing causes them to retreat deeper into isolation."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Wife screams that Husband is selfish and emotionally cold, prompting Husband to storm out of the house completely.",
+        "feedback": "Worst: Misinterpreting a need for quiet recovery as a personal attack triggers a severe cycle of pursuit and withdrawal."
+      }
+    ]
+  },
+  {
+    "id": "home-2",
+    "level": 2,
+    "title": "The Art of Listening",
+    "principle": "2 — Prioritize",
+    "description": "The Wife comes home stressed about a difficult conflict with a coworker. As she explains the unfair situation, the Husband immediately interrupts with a step-by-step logical strategy to solve the workplace issue.",
+    "sceneMetadata": {
+      "environment": "Kitchen table during evening dinner. Coffee mugs on table. Rain visible outside the window.",
+      "cameraAngle": "Face-to-face conversational perspective.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Wife",
+          "position": "left",
+          "emotion": "Frustrated and hurt",
+          "animation": "fidget",
+          "tone": "rose"
+        },
+        {
+          "id": "husband",
+          "name": "Husband",
+          "position": "right",
+          "emotion": "Solution-oriented",
+          "animation": "lean",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["My coworker took credit for my work again.", "Nobody even listened to my side."]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Here's what you should do...", "First, document everything."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["I don't need a solution right now.", "I just want someone to understand."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Husband stops offering advice, hugs Wife, and says, 'That sounds incredibly frustrating, tell me more,' validating the feelings first."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Husband listens quietly but looks restless, waiting for Wife to finish talking so he can suggest a quick, practical fix.",
+        "feedback": "Sub-optimal: You offered physical presence, but your mental impatience shows you value fixing problems over connecting emotionally."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Husband says, 'You are overreacting, just ignore the coworker and do your job,' dismissing the emotional distress completely.",
+        "feedback": "Passive: Minimizing someone's emotional experience makes them feel invalidated, isolated, and unheard in their own home."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Husband blames Wife for the conflict, explaining exactly what she did wrong to cause the situation.",
+        "feedback": "Worst: Offering unsolicited criticism when your partner seeks empathy changes your role from a supportive ally to an adversary."
+      }
+    ]
+  },
+  {
+    "id": "home-3",
+    "level": 3,
+    "title": "Healthy Independence",
+    "principle": "3 — Collaborate",
+    "description": "The relationship has been wonderful, but suddenly the Husband becomes distant and needs emotional distance. The Wife immediately feels a drop in self-esteem, panics, and tries to force deep intimacy.",
+    "sceneMetadata": {
+      "environment": "Modern home. Husband reading quietly on the balcony while Wife remains inside looking worried.",
+      "cameraAngle": "Wide split-scene showing emotional distance between both characters.",
+      "characters": [
+        {
+          "id": "husband",
+          "name": "Husband",
+          "position": "right",
+          "emotion": "Reflective",
+          "animation": "idle",
+          "tone": "slate"
+        },
+        {
+          "id": "wife",
+          "name": "Wife",
+          "position": "left",
+          "emotion": "Anxious",
+          "animation": "fidget",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Have I done something wrong?", "Why are you pulling away?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "whisper",
+          "lines": ["I just need some space.", "It isn't about you."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["What if they don't love me anymore?"]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Wife maintains her own hobbies and friends, allowing Husband space to pull away and naturally spring back with renewed affection."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Wife asks for reassurance once, then anxiously waits around the house for Husband to return to normal behavior.",
+        "feedback": "Sub-optimal: You gave physical space, but internal panic prevents you from living your life independently during your partner's natural cycle."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Wife punishes the distance by acting cold and distant in return, creating a wall of silent resentment between both people.",
+        "feedback": "Passive: Tit-for-tat emotional withdrawal creates artificial distance, blocking the natural urge to snap back together."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Wife demands to know why the love has changed, accuses Husband of cheating, and tracks their every move.",
+        "feedback": "Worst: Chasing someone who needs temporary distance pushes them away permanently and destroys the foundational trust of the relationship."
+      }
+    ]
+  },
+  {
+    "id": "home-4",
+    "level": 4,
+    "title": "Understanding Communication Styles",
+    "principle": "4 — Listen",
+    "description": "Planning a home renovation, the Wife exclaims, 'We never finish anything on time, and our house is a total disaster zone!' The Husband takes this literally, gets highly defensive, and pulls out past completion receipts.",
+    "sceneMetadata": {
+      "environment": "Home renovation area. Paint cans, tools, unfinished shelves, and renovation plans spread across a table.",
+      "cameraAngle": "Slightly elevated perspective focusing on both partners and the renovation mess.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Wife",
+          "position": "center",
+          "emotion": "Overwhelmed",
+          "animation": "fidget",
+          "tone": "rose"
+        },
+        {
+          "id": "husband",
+          "name": "Husband",
+          "position": "right",
+          "emotion": "Defensive",
+          "animation": "lean",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "shout",
+          "lines": ["We NEVER finish anything on time!", "This house is a disaster zone!"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["That's not true.", "Look at these receipts."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["I don't mean it literally.", "I'm just overwhelmed."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Husband realizes this is a dramatic expression of current overwhelm, ignores the literal words, and says, 'I know it feels chaotic right now, let's take a break.'"
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Husband stays quiet but logs the comment as an unfair accusation, feeling deeply unappreciated for the hard work he has done.",
+        "feedback": "Sub-optimal: You avoided an argument, but taking emotional hyperbole literally breeds internal resentment and silent anger."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Husband corrects the facts immediately, saying, 'That is a lie, we finished the kitchen exactly on schedule last year.'",
+        "feedback": "Passive: Debating literal facts during an emotional venting session makes your partner feel dismissed and completely misunderstood."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Husband snaps back, 'If the house is a disaster, it's because you waste money and cannot manage your time properly!'",
+        "feedback": "Worst: Turning an expression of emotional stress into a personal scoreboard argument escalates a simple complaint into an all-out war."
+      }
+    ]
+  },
+  {
+    "id": "home-5",
+    "level": 5,
+    "title": "Clear Requests & Cooperation",
+    "principle": "5 — Recharge",
+    "description": "The Wife feels completely overwhelmed by managing household chores alone. Instead of asking for help directly, she drops subtle hints, sighs loudly while cleaning, and expects the Husband to just notice and assist.",
+    "sceneMetadata": {
+      "environment": "Busy kitchen. Dirty dishes in the sink. Laundry basket nearby. Evening meal preparation underway.",
+      "cameraAngle": "Medium perspective showing both characters in the same room but mentally disconnected.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Wife",
+          "position": "left",
+          "emotion": "Frustrated and exhausted",
+          "animation": "fidget",
+          "isPlayer": true,
+          "tone": "primary"
+        },
+        {
+          "id": "husband",
+          "name": "Husband",
+          "position": "right",
+          "emotion": "Relaxed and unaware",
+          "animation": "idle",
+          "tone": "slate"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "whisper",
+          "lines": ["sigh", "Must be nice having nothing to do..."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Why don't they notice?", "Why do I always have to do everything?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Everything okay?", "You seem upset."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Wife approaches Husband directly and says, 'Would you please take out the trash and clean the kitchen counters before dinner?'"
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Wife asks, 'Could you help around here sometime?' leaving the request vague, confusing, and completely open to interpretation.",
+        "feedback": "Sub-optimal: You spoke up, but vague requests invite vague results. Clear, brief, and direct invitations work best."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Wife keeps doing all the work silently, growing angrier by the minute, waiting for Husband to magically volunteer.",
+        "feedback": "Passive: Expecting a partner to read your mind leads directly to bitterness. People cannot fix problems they do not know exist."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Wife slams a dirty dish down and yells, 'You are incredibly lazy! You just sit there while I do absolutely everything!'",
+        "feedback": "Worst: Exploding after holding silent resentment shocks your partner and turns an unspoken need into a painful, defensive confrontation."
+      }
+    ]
+  }
+]

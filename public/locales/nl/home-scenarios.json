@@ -1,0 +1,362 @@
+[
+  {
+    "id": "home-1",
+    "level": 1,
+    "title": "Emotioneel Herstel",
+    "principle": "1 — Eigenaarschap",
+    "description": "Na een vermoeiende dag op het werk komt de Echtgenoot thuis zichtbaar uitgeput en volkomen stil. De Echtgenote merkt de spanning op en begint onmiddellijk vragen te stellen om te helpen, maar hij trekt zich terug en wil alleen in stilte gelaten worden.",
+    "sceneMetadata": {
+      "environment": "Gezellige woonkamer bij zonsondergang. Aktetas bij de ingang. Warme omgevingsverlichting. Stille sfeer.",
+      "cameraAngle": "Licht 3D zijperspectief gericht op de ingang en zitgedeelte.",
+      "characters": [
+        {
+          "id": "husband",
+          "name": "Echtgenoot",
+          "position": "left",
+          "emotion": "Uitgeput, leeggelopen",
+          "animation": "slump",
+          "tone": "slate"
+        },
+        {
+          "id": "wife",
+          "name": "Echtgenote",
+          "position": "center",
+          "emotion": "Bezorgd en zorgzaam",
+          "animation": "idle",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Hé, gaat het goed met je?", "Is er iets op het werk gebeurd?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "whisper",
+          "lines": ["Ik heb nu gewoon stilte nodig...", "Alsjeblieft, niet nu."]
+        },
+        {
+          "speakerId": "husband",
+          "type": "thought",
+          "lines": ["Mijn hersenen zijn volledig overbelast.", "Ik heb eerst tijd nodig om te herstellen."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Echtgenote zegt: 'Ik zie dat je een zware dag hebt gehad. Ik ben hier als je wilt praten, maar ik geef je nu ruimte', terwijl Echtgenoot belooft na een uur stilte contact op te nemen."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Echtgenote stopt met vragen stellen maar voelt zich gekwetst en afgewezen, aangenomen dat de stilte betekent dat de relatie in moeilijkheden verkeert, terwijl Echtgenoot de hele nacht geïsoleerd blijft.",
+        "feedback": "Suboptimaal: Je vermeed een ruzie, maar gebrek aan begrip creëert onnodig ongerust. De een heeft solo verwerkingstijd nodig, terwijl de ander zekerheid nodig heeft."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Echtgenote volgt Echtgenoot door het huis, eist dat hij zich openbaart en over zijn gevoelens praat, waardoor Echtgenoot volledig niet meer reageert.",
+        "feedback": "Passief: Verbale uitdrukking forceren op iemand die interne verwerking nodig heeft, doet hem dieper in isolatie terugtrekken."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Echtgenote schreeuwt dat Echtgenoot egoïstisch en emotioneel afstandelijk is, wat Echtgenoot ertoe brengt volledig uit huis te stormen.",
+        "feedback": "Ergste: Een behoefte aan rustige herstel verkeerd interpreteren als persoonlijke aanval triggert een ernstige cyclus van achtervolging en terugtrekking."
+      }
+    ]
+  },
+  {
+    "id": "home-2",
+    "level": 2,
+    "title": "De Kunst van Luisteren",
+    "principle": "2 — Prioriteer",
+    "description": "De Echtgenote komt thuis gestrest over een moeilijk conflict met een collega. Terwijl ze de oneerlijke situatie uitlegt, onderbreekt de Echtgenoot haar onmiddellijk met een stap-voor-stap logische strategie om het werkprobleem op te lossen.",
+    "sceneMetadata": {
+      "environment": "Keukentafel tijdens avondeten. Koffiekoppen op tafel. Regen zichtbaar buiten het raam.",
+      "cameraAngle": "Face-to-face conversatieperspectief.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Echtgenote",
+          "position": "left",
+          "emotion": "Gefrustreerd en gekwetst",
+          "animation": "fidget",
+          "tone": "rose"
+        },
+        {
+          "id": "husband",
+          "name": "Echtgenoot",
+          "position": "right",
+          "emotion": "Oplossingsgericht",
+          "animation": "lean",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Mijn collega heeft weer mijn werk gestolen.", "Niemand luisterde zelfs naar mijn kant."]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Dit is wat je zou moeten doen...", "Eerst alles documenteren."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Ik heb nu geen oplossing nodig.", "Ik wil dat iemand begrijpt."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Echtgenoot stopt met advies geven, omhelst Echtgenote en zegt: 'Dat klinkt ongelooflijk frustrerend, vertel me meer', valideren eerst de gevoelens."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Echtgenoot luistert stil maar ziet er rusteloos uit, wachtend tot Echtgenote klaar is met praten zodat hij een snelle, praktische oplossing kan voorstellen.",
+        "feedback": "Suboptimaal: Je bood fysieke aanwezigheid, maar je mentale ongeduld toont dat je problemen oplossen meer waardeert dan emotioneel contact."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Echtgenoot zegt: 'Je reageert over, negeer je collega gewoon en doe je werk', waardoor je de emotionele angst volledig afzet.",
+        "feedback": "Passief: Iemands emotionele ervaring minimaliseren doet haar zich ongeldig, geïsoleerd en ongehoord voelen in haar eigen huis."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Echtgenoot beschuldigt Echtgenote van het conflict, en legt uit precies wat zij verkeerd deed om de situatie te veroorzaken.",
+        "feedback": "Ergste: Ongevraagde kritiek geven wanneer je partner empathie zoekt, verandert je rol van ondersteunende bondgenoot in tegenstander."
+      }
+    ]
+  },
+  {
+    "id": "home-3",
+    "level": 3,
+    "title": "Gezonde Onafhankelijkheid",
+    "principle": "3 — Samenwerk",
+    "description": "De relatie is wonderbaarlijk geweest, maar plotseling wordt de Echtgenoot afstandelijk en heeft emotionele ruimte nodig. De Echtgenote voelt onmiddellijk haar zelfvertrouwen dalen, raakt in paniek en probeert diepe intimiteit af te dwingen.",
+    "sceneMetadata": {
+      "environment": "Modern huis. Echtgenoot leest rustig op het balkon terwijl Echtgenote binnen blijft en bezorgd lijkt.",
+      "cameraAngle": "Brede split-scene die emotionele afstand tussen beide personages toont.",
+      "characters": [
+        {
+          "id": "husband",
+          "name": "Echtgenoot",
+          "position": "right",
+          "emotion": "Nadenkend",
+          "animation": "idle",
+          "tone": "slate"
+        },
+        {
+          "id": "wife",
+          "name": "Echtgenote",
+          "position": "left",
+          "emotion": "Angstig",
+          "animation": "fidget",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "speech",
+          "lines": ["Heb ik iets verkeerd gedaan?", "Waarom trek je je terug?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "whisper",
+          "lines": ["Ik heb gewoon ruimte nodig.", "Het gaat niet over jou."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Wat als ze me niet meer houden?"]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Echtgenote handhaaft haar eigen hobby's en vrienden, geeft Echtgenoot ruimte om zich terug te trekken en veert natuurlijk terug met vernieuwd genegenheid."
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Echtgenote vraagt eenmaal om zekerheid, wacht dan angstig rond het huis tot Echtgenoot teruggaat naar normaal gedrag.",
+        "feedback": "Suboptimaal: Je gaf fysieke ruimte, maar interne paniek verhindert je om je leven onafhankelijk te leven tijdens de natuurlijke cyclus van je partner."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Echtgenote straft de afstand door op haar beurt afstandelijk te reageren, waardoor een muur van stille wrok tussen beide mensen ontstaat.",
+        "feedback": "Passief: Tit-for-tat emotionele terugtrekking creëert kunstmatige afstand, die de natuurlijke neiging blokkeert om weer bij elkaar te komen."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Echtgenote eist te weten waarom de liefde is veranderd, beschuldigt Echtgenoot van vreemdgaan en volgt elke zet na.",
+        "feedback": "Ergste: Iemand achtervolgen die tijdelijke afstand nodig heeft, duwt hen permanent weg en vernietigt het fundamentele vertrouwen van de relatie."
+      }
+    ]
+  },
+  {
+    "id": "home-4",
+    "level": 4,
+    "title": "Communicatiestijlen Begrijpen",
+    "principle": "4 — Luister",
+    "description": "Bij het plannen van een huisrenovatie roept de Echtgenote uit: 'We ronden nooit iets op tijd af, en ons huis is een totale ramp!' De Echtgenoot neemt dit letterlijk, wordt zeer defensief en haalt vorige ontvangsten op.",
+    "sceneMetadata": {
+      "environment": "Huisrenovatiegebied. Verfblikken, gereedschap, onafgewerkte planken en renovatieplannen verspreid over een tafel.",
+      "cameraAngle": "Licht verheven perspectief gericht op beide partners en de renovatierotzooi.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Echtgenote",
+          "position": "center",
+          "emotion": "Overbelast",
+          "animation": "fidget",
+          "tone": "rose"
+        },
+        {
+          "id": "husband",
+          "name": "Echtgenoot",
+          "position": "right",
+          "emotion": "Defensief",
+          "animation": "lean",
+          "isPlayer": true,
+          "tone": "primary"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "shout",
+          "lines": ["We ronden NOOIT iets op tijd af!", "Dit huis is een totale ramp!"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Dat is niet waar.", "Kijk naar deze bonnen."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Ik bedoel het niet letterlijk.", "Ik ben gewoon overbelast."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Echtgenoot beseft dat dit een dramatische uiting is van huidige overbelasting, negeert de letterlijke woorden en zegt: 'Ik weet dat het nu chaotisch voelt, laten we een pauze nemen.'"
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Echtgenoot blijft stil maar registreert het commentaar als oneerlijke beschuldiging, voelt zich diep niet gewaardeerd voor het harde werk dat hij heeft gedaan.",
+        "feedback": "Suboptimaal: Je vermeed een ruzie, maar emotionele overdrijving letterlijk nemen creëert interne wrok en stille woede."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Echtgenoot corrigeert onmiddellijk de feiten: 'Dat is een leugen, we hebben de keuken vorig jaar exact op schema afgerond.'",
+        "feedback": "Passief: Feiten debatteren tijdens een emotionele ventilatiessessie doet je partner zich afgewezen en volledig begrepen voelen."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Echtgenoot snap terug: 'Als het huis een ramp is, is het omdat je geld verspilt en je tijd niet goed kunt beheren!'",
+        "feedback": "Ergste: Emotionele stress in een persoonlijk scorebord-argument veranderen escaleert een eenvoudige klacht in een totale oorlog."
+      }
+    ]
+  },
+  {
+    "id": "home-5",
+    "level": 5,
+    "title": "Duidelijke Verzoeken en Samenwerking",
+    "principle": "5 — Herladen",
+    "description": "De Echtgenote voelt zich volkomen overbelast door het alleen beheren van huishoudelijke taken. In plaats van direct om hulp te vragen, laat ze subtiele hints vallen, zucht luid terwijl ze schoonmaakt en verwacht dat de Echtgenoot het gewoon opmerkt en helpt.",
+    "sceneMetadata": {
+      "environment": "Drukke keuken. Vuile vaten in de wasbak. Waszak in de buurt. Bereidingen voor de avondmaaltijd gaande.",
+      "cameraAngle": "Mediumogperspectief toont beide personages in dezelfde kamer maar mentaal onverbonden.",
+      "characters": [
+        {
+          "id": "wife",
+          "name": "Echtgenote",
+          "position": "left",
+          "emotion": "Gefrustreerd en uitgeput",
+          "animation": "fidget",
+          "isPlayer": true,
+          "tone": "primary"
+        },
+        {
+          "id": "husband",
+          "name": "Echtgenoot",
+          "position": "right",
+          "emotion": "Ontspannen en onbewust",
+          "animation": "idle",
+          "tone": "slate"
+        }
+      ],
+      "dialogues": [
+        {
+          "speakerId": "wife",
+          "type": "whisper",
+          "lines": ["zucht", "Moet fijn zijn om niets te hoeven doen..."]
+        },
+        {
+          "speakerId": "wife",
+          "type": "thought",
+          "lines": ["Waarom merken zij het niet op?", "Waarom moet ik altijd alles doen?"]
+        },
+        {
+          "speakerId": "husband",
+          "type": "speech",
+          "lines": ["Gaat het goed?", "Je lijkt van streek."]
+        }
+      ]
+    },
+    "choices": [
+      {
+        "key": "A",
+        "points": 10,
+        "text": "Echtgenote benadert Echtgenoot rechtstreeks en zegt: 'Zou je alsjeblieft de vuilnisbak buiten kunnen zetten en de keukenkastjes schoonmaken voordat we gaan eten?'"
+      },
+      {
+        "key": "B",
+        "points": 5,
+        "text": "Echtgenote vraagt: 'Zou je hier soms kunnen helpen?' waardoor het verzoek vaag, verwarrend en volledig open voor interpretatie blijft.",
+        "feedback": "Suboptimaal: Je sprak, maar vage verzoeken nodigen vage resultaten uit. Duidelijke, beknopte en directe verzoeken werken het beste."
+      },
+      {
+        "key": "C",
+        "points": 0,
+        "text": "Echtgenote blijft zwijgend al het werk doen, wordt elke minuut bozer, wachtend tot Echtgenoot zich magisch vrijwillig meldt.",
+        "feedback": "Passief: Verwachten dat een partner je gedachten leest leidt rechtstreeks tot verbitteringbitterheid. Mensen kunnen problemen niet oplossen die ze niet kennen."
+      },
+      {
+        "key": "D",
+        "points": -5,
+        "text": "Echtgenote smijt een vuil bord neer en schreeuwt: 'Je bent ongelooflijk lui! Je zit daar gewoon terwijl ik absoluut alles doe!'",
+        "feedback": "Ergste: Ontploffen na stille wrok schokt je partner en verandert een ongesproken behoefte in een pijnlijk, defensief confrontatie."
+      }
+    ]
+  }
+]
